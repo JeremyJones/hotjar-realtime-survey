@@ -1,0 +1,132 @@
+﻿Python Developer Task
+
+
+
+
+The objective of this task is to set up a simple HTML/CSS multi-step survey which sends responses back to a database and updates a survey responses admin page in real time.
+
+
+You’re expected to use the following technologies to do this:
+
+
+* Python - backend
+* HTML / CSS / JavaScript - survey page
+* HTML / CSS / JavaScript (ideally Angular but not a requirement) - admin page
+* PostgreSQL or MySQL - database
+
+
+You are free to use any other additional technologies to complete the task as long as you can justify why they have been used.
+
+
+Task Details
+
+
+
+
+	
+
+	Hotjar has just added a new story to its development backlog: 
+
+
+As a Hotjar user, I want to be able to see real-time survey responses coming in from a multi-step survey on my website.
+
+
+You have been chosen to work on the task. 
+
+
+Requirements:
+
+
+1. A HTML page containing a multi-step survey. You can either have separate HTML pages for each step or simply use JS to show and hide different steps.
+   1. The survey should contain 4 steps and have NEXT and PREVIOUS buttons on the steps which need them. 
+   2. The survey should contain the following fields (2 fields per step):
+      1. Step 1: Name (input), Email (input)
+      2. Step 2: Age (select), About me (textarea)
+      3. Step 3: Address (input), Gender (input[radio])
+      4. Step 4: Favourite Book (input), Favourite Colors (input[checkbox])
+   1. All fields on the first 2 steps are required. All fields on the final 2 steps are optional. 
+   2. Once all steps have been completed, a thank you message should appear.
+   3. If the browser is closed and re-opened, the page should show a “Survey already submitted.” message if the survey was completed or open the last step the user was on. 
+
+   1. An admin page which contains 
+   1. A list of survey responses. This page should contain a simple table which automatically updates each time a new survey response is being submitted.
+   1. The data should update in almost real-time - without the need for reloads. 
+   2. The table column headers should contain the field names - 8 in total since the survey contains a total of 8 fields (2 fields per step). 
+   3. The final column should contain a simple flag which shows whether the survey has been completed or not. This should only be marked as ‘completed’ if users finished the final step of the survey.
+   1. A summary of responses. This section should contain:
+   1. Average Age
+   2. Gender Ratio
+   3. Top 3 Colors
+
+
+
+
+Important Notes:
+
+
+   1. The finished work should be fully functionable according to the specs above. 
+   2. The survey responses submitted must be saved in a database table.
+   3. The survey does not need to be 'pixel perfect' but we expect it to be usable.
+
+
+	
+
+
+
+IMPORTANT: It is crucial to communicate with the rest of the development team whilst you work on your task. We are here to help! 
+
+
+
+
+Deliverables
+
+
+Access to the code base (either send a zipped file or give access to a code repository) and a fully working demo of the above. Since you will need to use both python and a database to complete your task, you may demo the task off your own local machine (via screensharing). During your demo, you will be expected to have two browser windows open - one with the survey displayed and another with the admin displayed. Whilst adding survey responses, we should be able to clearly see the admin being updated without the need for refreshes. 
+
+
+You will also be asked to explain why you designed / developed the task in the way you did and explain any alternative methods you considered but decided against.
+
+
+The Hotjar Team
+ 
+The team members highlighted in blue are part of the development team - you may contact any of them on HipChat to ask for advice or share your thoughts whilst working on your task.
+
+
+David Darmanin CEO / Co-founder 
+Johan Malmberg CRO / Co-founder
+Jonathan Vella Director of Design / Co-founder / Team Lead
+Marc von Brockdorff Director of Engineering / Co-founder
+Erik Näslund Chief Architect / Co-founder
+Ken Weary VP of Operations
+Jon Malmberg Director of Demand Generation
+Nick Heim Director of Inbound Marketing
+Patrik Larsson Full-Stack Developer / Team Lead
+Stephanie Buhagiar Full-Stack Developer
+Vasco Pinho DevOps Engineer
+Zander Whitehurst UX Designer
+Jason Kelly Full-stack Developer
+João Figueiredo Full-stack Developer
+William Reade Lead Mobile Engineer
+Chiara Felice Sant Cassia Full-stack Developer
+Martin Fitzpatrick Full-stack Developer
+Mariella Parascandolo Operations Executive
+Melissa Mauk - Finance Co-ordinator
+Sara Bent - Recruitment Co-ordinator
+Christian Nussbaumer Customer Success Manager
+Eric Robinson Customer Success Engineer
+Siobhan Laura Hyser Hotjar Hero Lead
+Diana De Jesus Hotjar Hero Lead
+Adam Nevarez Hotjar Hero
+Mafalda Melo Hotjar Hero
+
+
+
+
+
+
+________________
+
+
+
+
+Good luck!
