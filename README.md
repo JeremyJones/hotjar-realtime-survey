@@ -23,8 +23,8 @@ There should be two questions per screen with varying input types for the answer
 
 The questions & answer types should be
 
-1. Name (text input). Required
-1. Email (text input). Required
+1. Name (text input). _Required_
+1. Email (text input). _RequiredUnique_
 1. Age (select popup). [possible values? minimum value?]
 1. About me (textarea). Maximum length?
 1. Address (text input) <-- what about multiple lines?
