@@ -58,8 +58,8 @@ AWS Lambda hosting using Zappa (current blocker is just account privileges & key
 
 #### System architecture
 
-Front-end: Gunicorn
-Backend: Python 3
+Front-end: Nginx
+Backend: Gunicorn, Python 3
 Database: MySQL 5.7
 
 #### Frameworks
