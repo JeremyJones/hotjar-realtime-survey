@@ -4,5 +4,5 @@ venv*
 *.tmp
 tmp/*
 .vscode/*
-env.json
+env.bash
 READMEcopy.txt

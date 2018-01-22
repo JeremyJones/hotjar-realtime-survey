@@ -47,9 +47,11 @@ This section contains planning notes and other information.
 #### Hosting
 
 *Planned*
+
 Digital Ocean - server created 22/01/18  (frankfurt,2cpu,3gb,60gb,ubuntu) ip 207.154.202.103
 
 *Considered*
+
 1. Local hosting
 1. Raspberry PI
 
@@ -65,9 +67,13 @@ Database: MySQL 5.7
 #### Frameworks
 
 Front-end (end-user):   Bootstrap(?), backbone.js, underscore.js, jQuery. Require.js Multiple screens using JS.
-Front-end (Hotjar user):    Similar. Also APIStar w templates, Google Visualizations for data? Sparklines etc
+Front-end (Hotjar user):    Similar. Also APIStar w templates, Google Visualizations for data? Data tables, Sparklines etc
 
 Backend:    APIStar (w additional templates for admin screen)
+
+#### Objects
+
+Potentials: Question w answers; Response; Survey.
 
 #### Other
 
@@ -77,6 +83,4 @@ The questions with their possible responses -- stored in json files for now. (Or
 
 Security/SSL? This is user data. Data protection or GDPR legislation. (Private by default.)
 
-Env configuration in the environment, not the codebase, following 12-factor app guidelines. File is env.json with an example one in env.json.example
-
-Color wheels or other efficient color storage? Could analyse results based on ranges of colors.
+Env configuration in the environment, not the codebase, following 12-factor app guidelines. Ignored file env.bash has a committed example in env.bash.example
