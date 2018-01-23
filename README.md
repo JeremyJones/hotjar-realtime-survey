@@ -84,3 +84,7 @@ The questions with their possible responses -- stored in json files for now. (Or
 Security/SSL? This is user data. Data protection or GDPR legislation. (Private by default.)
 
 Env configuration in the environment, not the codebase, following 12-factor app guidelines. Ignored file env.bash has a committed example in env.bash.example
+
+#### And finally
+
+Thank you. You can find me at jeremagne@gmail.com and +44 771 891 3592
