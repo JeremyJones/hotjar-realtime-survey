@@ -35,7 +35,7 @@ Each stage of delivery is essentially a mini-sprint, with requirements, coding, 
 
 *Foundations*
 
-During this stage, the infrastructure will be configured, the database configured, and the initial views made available to the *Admin* page and the *Survey* page. The database will be exposed through the built-in API views, and the server will be ready for use by the two pages through the web. There will be a *Hello* admin page, or a clear plan for it and a *Hello* survey page, or a clear plan for it.
+During this stage, the infrastructure will be configured, the database configured, and the initial views made available to the *Admin* page and the *Survey* page. The database will be exposed through the built-in API views, and the server will be ready for use by the two pages through the web. There will be a *Hello* admin page, or a clear plan for it, and a *Hello* survey page, or a clear plan for it.
 
 *Admin page*
 
