@@ -7,8 +7,16 @@ The plan calls for an overall architecture design, which is executed in stages (
 
 In this plan, there are three stages: This is because I would expect to be able to achieve each of these stages in roughly a day, once up to speed in a role.
 
-Milestones
-----------
+*In this document*
+
+1. List of Milestones
+1. Staged Delivery Plan
+1. Risks & Mitigation
+
+
+
+List of Milestones
+------------------
 
 1. Requirements restated
 1. Architectural design
