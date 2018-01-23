@@ -17,6 +17,7 @@ List of Milestones
 ------------------
 
 1. Requirements restated
+1. Delivery Plan created
 1. Architectural design
 1. Delivery stages:
     1. Foundations: Infrastructure, Database access, View
@@ -32,6 +33,12 @@ Delivery Detail
 This stage comprises the contents of the README file, which re-states the requirements.
 
 This milestone is considered *achieved* on Monday 22 January.
+
+#### Delivery Plan created
+
+This stage comprises the creation and approval of this document.
+
+This milestone is expected 23-24 January.
 
 #### Architectural design
 
@@ -50,13 +57,13 @@ Each stage of delivery is essentially a mini-sprint, with requirements, coding, 
 
 During this stage, the infrastructure will be configured, the database configured, and the initial views made available to the *Admin* page and the *Survey* page. The database will be exposed through the built-in API views, and the server will be ready for use by the two pages through the web. There will be a *Hello* admin page, or a clear plan for it, and a *Hello* survey page, or a clear plan for it.
 
-This stage is expected to take 1 day.
+This stage is expected to last 1 day.
 
 *Admin page*
 
 During this stage the admin page will be developed, with the summary information and the list of survey responses. Sample data will need to be used to provide something for the system to display. The real-time updating aspect of the system will need to be in place, and simulated, but actual real time updating tests will not be possible until the *Survey* page.
 
-This stage is expected to take 1-2 days.
+This stage is expected to last 1-2 days.
 
 *Survey page*
 
@@ -66,11 +73,11 @@ The real-time updating feature of the *admin* page will be more easily testable 
 
 This third component of the system completes the end-to-end process of survey submission, storage, retrieval, display and analysis.
 
-This stage is expected to take 1-2 days.
+This stage is expected to last 1-2 days.
 
 #### Demonstration
 
-The demonstration will take place at .. ?
+The demonstration will take place tbc
 
 The demonstration session is expected to last n.
 
