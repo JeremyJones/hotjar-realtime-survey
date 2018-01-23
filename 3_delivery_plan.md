@@ -5,7 +5,7 @@ This page describes the Delivery Plan for the project.
 
 The plan calls for an overall architecture design, which is executed in stages (mini-sprints, essentially). Each stage focuses on one component, with the overall plan ensuring each part fits together.
 
-In this plan, there are three stages: This is because I would expect to be able to achieve each of these stages in roughly a day, once up to speed in a role.
+In this plan, there are three stages of delivery: This is because I would expect to be able to achieve each of these stages in roughly a day, once up to speed in a role.
 
 *In this document*
 
@@ -18,7 +18,7 @@ List of Milestones
 
 1. Requirements restated
 1. Architectural design
-1. Staged Delivery:
+1. Delivery stages:
     1. Foundations: Infrastructure, Database access, View
     1. Critical view: Admin side, tables, graphs, visualizations
     1. Survey view: 5 steps, next & previous, Ajax
@@ -31,7 +31,7 @@ Delivery Detail
 
 This stage comprises the contents of the README file, which re-states the requirements.
 
-This milestone is considered achieved on Monday 22 January.
+This milestone is considered *achieved* on Monday 22 January.
 
 #### Architectural design
 
