@@ -10,10 +10,8 @@ In this plan, there are three stages: This is because I would expect to be able 
 *In this document*
 
 1. List of Milestones
-1. Staged Delivery Plan
+1. Delivery Detail
 1. Risks & Mitigation
-
-
 
 List of Milestones
 ------------------
@@ -26,16 +24,23 @@ List of Milestones
     1. Survey view: 5 steps, next & previous, Ajax
 1. Demonstration
 
-Delivery
---------
+Delivery Detail
+---------------
 
 #### Requirements restated
 
 This stage comprises the contents of the README file, which re-states the requirements.
 
+This milestone is considered achieved on Monday 22 January.
+
 #### Architectural design
 
-The deliverable for this stage is a file which describes the overall architecture of the solution, major platforms & third-party software, and how the components in each stage will fit together.
+The deliverables for this stage are:
+
+1. A file which describes the overall architecture of the solution, major platforms & third-party software, and how the components in each stage will fit together.
+2. Feedback for that plan, incorporated revisions, and broad approval to proceed.
+
+This milestone is expected 24-25 January.
 
 #### Delivery
 
@@ -45,9 +50,13 @@ Each stage of delivery is essentially a mini-sprint, with requirements, coding, 
 
 During this stage, the infrastructure will be configured, the database configured, and the initial views made available to the *Admin* page and the *Survey* page. The database will be exposed through the built-in API views, and the server will be ready for use by the two pages through the web. There will be a *Hello* admin page, or a clear plan for it, and a *Hello* survey page, or a clear plan for it.
 
+This stage is expected to take 1 day.
+
 *Admin page*
 
 During this stage the admin page will be developed, with the summary information and the list of survey responses. Sample data will need to be used to provide something for the system to display. The real-time updating aspect of the system will need to be in place, and simulated, but actual real time updating tests will not be possible until the *Survey* page.
+
+This stage is expected to take 1-2 days.
 
 *Survey page*
 
@@ -57,19 +66,23 @@ The real-time updating feature of the *admin* page will be more easily testable 
 
 This third component of the system completes the end-to-end process of survey submission, storage, retrieval, display and analysis.
 
+This stage is expected to take 1-2 days.
+
 #### Demonstration
 
 The demonstration will take place at .. ?
 
+The demonstration session is expected to last n.
+
 #### Deliverables
 
 1. Access to the code base. This is available at any time at [https://bitbucket.org/hotjar/dev-task-jeremy](https://bitbucket.org/hotjar/dev-task-jeremy)
-1. Fully working demo. This is available at [http://hotjar.jerjones.me](http://hotjar.jerjones.me) or [http://207.154.202.103](http://207.154.202.103)
+1. Fully working demo. This will be available at [http://hotjar.jerjones.me](http://hotjar.jerjones.me) or [http://207.154.202.103](http://207.154.202.103)
 
 
 Risks & Mitigation
 ------------------
 
-1. _Failure to meet expectations_ for deliverables may result in solution which is not usable. This will be mitigated by frequent reviews of plans and code to ensure the final deliverables meet or exceed expectations.
-1. _Unexpected factors in first time components_ (namely API Star) may introduce delays to resolve. This will be mitigated by ensuring that the number of first-time components is as low as possible, and ... 
-1. A.N. Other?
+1. _Failure to meet expectations_ for deliverables may result in solution which is not usable. This will be mitigated by frequent reviews of plans and code to ensure the final deliverables meet or exceed expectations. Risk of occurring: Medium
+1. _Unexpected factors in first time components_ (namely API Star) may introduce delays to resolve. This will be mitigated by ensuring that the number of first-time components is as low as possible. Risk of occurring: Medium
+1. _Others to be identified_
