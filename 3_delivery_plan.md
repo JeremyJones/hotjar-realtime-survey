@@ -13,9 +13,9 @@ Milestones
 1. Requirements restated
 1. Architectural design
 1. Staged Delivery:
-  1. Foundations: Infrastructure, Database, View
-  1. Critical view: Admin side, tables, graphs, visualizations
-  1. Survey view: 5 steps, next & previous, Ajax
+    1. Foundations: Infrastructure, Database, View
+    1. Critical view: Admin side, tables, graphs, visualizations
+    1. Survey view: 5 steps, next & previous, Ajax
 1. Demonstration
 
 Risks & Mitigation
