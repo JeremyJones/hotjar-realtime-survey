@@ -21,6 +21,6 @@ Milestones
 Risks & Mitigation
 ------------------
 
-1. ~Failure~to~meet~expectations~ for deliverables may result in solution which is not usable. This will be mitigated by frequent reviews of plans and code to ensure the final deliverables meet or exceed expectations.
-1. ~Unexpected~factors~in~first~time~components~ (namely API Star) may introduce delays to resolve. This will be mitigated by ensuring that the number of first-time components is as low as possible, and ... 
+1. _Failure_to_meet_expectations_ for deliverables may result in solution which is not usable. This will be mitigated by frequent reviews of plans and code to ensure the final deliverables meet or exceed expectations.
+1. _Unexpected_factors_in_first_time_components_ (namely API Star) may introduce delays to resolve. This will be mitigated by ensuring that the number of first-time components is as low as possible, and ... 
 1. A.N. Other?
