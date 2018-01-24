@@ -6,3 +6,4 @@ tmp/*
 .vscode/*
 env.bash
 READMEcopy.txt
+*.psd

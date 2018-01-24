@@ -56,7 +56,8 @@ Digital Ocean - server created 22/01/18  (frankfurt,2cpu,3gb,60gb,ubuntu) ip 207
 1. Raspberry PI
 
 *Possible*
-AWS Lambda hosting using Zappa (current blocker is just account privileges & key setup)
+
+Server-less hosting on AWS Lambda, using the [Zappa](https://github.com/Miserlou/Zappa) wrapper (current blocker is just account privileges & key setup). 
 
 #### System architecture
 
