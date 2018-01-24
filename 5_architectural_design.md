@@ -16,6 +16,10 @@ There are three distinct user groups:
 1. Survey users: These are website end-users who answer the survey. They complete a set of questions (eight questions, presented two per web page/screen/step) and submit it for a Thank You message. They may be using desktop or mobile devices.
 1. System users: This is Hotjar staff and any other stakeholders. They can access the system using SSH as well as HTTP. They also can use the platform's built-in data tools for monitoring & maintaining the system and survey responses, such as those available under MySQL and API Star. Their access, for system purposes, is expected to be via desktop/laptop devices rather than mobile devices.
 
+A high-level overview appears below.
+
+![*](https://bytebucket.org/hotjar/dev-task-jeremy/raw/2c471170bf2c59b59ae6561d4905e6a417511f93/designplanning/task-overview.png?token=6917bc62fcb5310396a7ccc2974f9cfc647d3733)
+
 #### Database
 
 The database is MySQL 5.7.
@@ -56,7 +60,7 @@ An admin user clicks (?) to view _their_ survey results. This loads a management
 
 The summary information area will utilise Google Visualizations where appropriate to represent the data.
 
-The table of responses (and potentially also the summary area) will include information on surveys which are in progress / partially-completed. It should distinguish between those that are 'live' and being completed, and those which have probably been abandoned, using an idle time threshold and/or the 'pings' from the survey application code.
+The table of responses (and potentially also the summary area) will include real-time, automatically-updating information on surveys which are in progress / partially-completed. It should distinguish between those that are 'live' and being completed, and those which have probably been abandoned, using an idle time threshold and/or the 'pings' from the survey application code.
 
 Security
 --------
