@@ -107,6 +107,7 @@ I do not yet have working experience with Angular and would prefer to implement 
 
 When implemented effectively, in-memory caches such as Memcache and Redis can significantly improve system performance. For the purposes of this demonstration, the system is _not_ augmented with these additional tools, relying instead for performance on the built-in capacity of the core platforms and the efficiency of the code they run.
 
-#### History
+History
+-------
 
 24 January - First draft for feedback.
