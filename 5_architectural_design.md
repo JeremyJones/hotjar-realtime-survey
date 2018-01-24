@@ -41,9 +41,11 @@ The front-end architecture will use Backbone.js for RESTful communication with t
 Process: Survey
 ---------------
 
-A user clicks (?) to view the first page of the survey. This page loads the Javascript survey application from the survey, along with the list of questions. (They are separated to abide by (Hotjar best practice for optimising reloads of updated data).)
+A user clicks (?) to view the first page of the survey. This page loads the Javascript survey application from the survey, and the list of questions. (They are separated in order to obey [Hotjar's lesson #7 for scaling technical architecture](https://www.hotjar.com/blog/9-lessons-we-learned-while-scaling-hotjars-tech-architecture).)
 
 The survey application will display the relevant questions to the user. Questions which have been answered already by this user will not be displayed again. The system will rely on cookies on the client-side, and checks on the server-side, to manage these decisions.
+
+The name and email address fields, on the first step, are both required. The email field will also be constrained to unique values, using a configurable flag within the system.
 
 The survey application will 'ping' the server to advise about user activity. On completion of each step, the application will send the data to the server and display the next step. The final screen will have a Thank you message.
 
