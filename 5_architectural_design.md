@@ -62,6 +62,63 @@ The summary information area will utilise Google Visualizations where appropriat
 
 The table of responses (and potentially also the summary area) will include real-time, automatically-updating information on surveys which are in progress / partially-completed. It should distinguish between those that are 'live' and being completed, and those which have probably been abandoned, using an idle time threshold and/or the 'pings' from the survey application code.
 
+Technical Details
+-----------------
+
+#### Admin Area and Management Dashboard
+
+Captcha sign-in
+
+Top summary section could contain:
+
+- Funnels
+- Pie graph (gender split)
+
+
+#### Software Architecture
+
+The server app should be extensible for different content and sources of survey response data in future, not just the end-user views provided for this task.
+
+If not available in API Star, then the logic for attributes such as _required_, or _email_, could be abstracted. (Strategy Pattern)
+
+If not available within the visualisation engine, on the management dashboard, the Javascript-based interaction between the browser and the server could be Observer Pattern. 
+
+*Survey*
+
+The front-end will consist of:
+
+- HTML snippets which the Javascript will use as templates for the steps/screens
+- Javascript code: 2 parts, logic code and questions code.
+- ...
+
+The back-end will consist of:
+
+tbc
+
+Other detail.
+
+*Admin page*
+
+The front-end will consist of:
+
+- 
+
+The back-end will consist of:
+
+tbc
+
+Other detail.
+
+
+
+##### User Interface & Cosmetics 
+
+The requirements say that it is a standalone product that does not need to integrate with the existing Hotjar interface.
+
+But it could still look like a Hotjar product.
+
+
+
 Security
 --------
 
@@ -76,6 +133,13 @@ Although specific users can clearly be identified using this system, [Hotjar's p
 Authorisation information including database passwords will be stored in the _environment_ and not in the codebase, following [Twelve Factor App guidelines](https://12factor.net/config). The list of required environment variables for the system is contained in the file env.bash.example at the root level of the code repository.
 
 Access to the web pages for the survey and management dashboards will have specific additional security measures to be determined during those delivery stages.
+
+Privacy
+-------
+
+The data & database will reside in the European Union.
+
+Legal requirements and conventions, such as cookie warnings, terms of use, privacy policy and contact information will not be included.
 
 Capacity
 --------
@@ -106,6 +170,14 @@ I do not yet have working experience with Angular and would prefer to implement 
 *Memcache, Redis*
 
 When implemented effectively, in-memory caches such as Memcache and Redis can significantly improve system performance. For the purposes of this demonstration, the system is _not_ augmented with these additional tools, relying instead for performance on the built-in capacity of the core platforms and the efficiency of the code they run.
+
+*Typescript*
+
+If I am in a role which includes Javascript, I would prefer to use Typescript for code clarity and discipline. However it is not something which I have experience with, and I haven't used it.
+
+*Less, SASS*
+
+CSS processing languages, and other modern front-end standards, are something I have working experience with but have never used in a daily basis, as my previous roles were primarily server-side programming for applications and databases.
 
 History
 -------
