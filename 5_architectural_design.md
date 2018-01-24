@@ -6,7 +6,7 @@ This document is the primary design document for this task. It does _not_ contai
 Foundations
 -----------
 
-The server is a dual-CPU droplet from Digital Ocean with 2GB memory and 60GB disk space, located in Frankfurt, Germany. The operating system is Linux, variant Ubuntu 16.04 64-bit. The server's IP address is 207.154.202.103 and can be accessed using the alias hotjar.jerjones.me
+The server is a dual-CPU droplet from Digital Ocean with 2GB memory and 60GB disk space, located in Frankfurt, Germany. The operating system is Linux, variant Ubuntu 16.04 64-bit. The server's IP address is 207.154.202.103 and can be accessed using the alias [hotjar.jerjones.me](http://hotjar.jerjones.me).
 
 The server is a single, self-contained web, application and database server.
 
