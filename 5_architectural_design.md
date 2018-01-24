@@ -38,7 +38,8 @@ The Bootstrap suite provides a convenient, if not exceptional, shortcut to respo
 
 The front-end architecture will use Backbone.js for RESTful communication with the server.
 
-#### Process: Survey
+Process: Survey
+---------------
 
 A user clicks (?) to view the first page of the survey. This page loads the Javascript survey application from the survey, along with the list of questions. (They are separated to abide by (Hotjar best practice for optimising reloads of updated data).)
 
@@ -46,7 +47,8 @@ The survey application will display the relevant questions to the user. Question
 
 The survey application will 'ping' the server to advise about user activity. On completion of each step, the application will send the data to the server and display the next step. The final screen will have a Thank you message.
 
-#### Process: Admin
+Process: Admin
+--------------
 
 An admin user clicks (?) to view _their_ survey results. This loads a management dashboard with a summary information area at the top, and the detail of the survey results in a table beneath. 
 
@@ -54,7 +56,8 @@ The summary information area will utilise Google Visualizations where appropriat
 
 The table of responses (and potentially also the summary area) will include information on surveys which are in progress / partially-completed. It should distinguish between those that are 'live' and being completed, and those which have probably been abandoned, using an idle time threshold and/or the 'pings' from the survey application code.
 
-#### Security
+Security
+--------
 
 The system will contain user data. The demonstration server will _not_ use SSL/HTTPS; thus the _hosting_ element will not be suitable for widespread production without appropriate certificates being procured & installed first.
 
@@ -66,23 +69,27 @@ Authorisation information including database passwords will be stored in the _en
 
 Access to the web pages for the survey and management dashboards will have specific additional security measures to be determined during those delivery stages.
 
-#### Capacity
+Capacity
+--------
 
 The capacity of the system is unknown at this time but will be tested for benchmark measurements at each stage of the delivery process, and on completion of the project. The intention is that a quantified measure of estimated minimum guaranteed capacity will be available upon delivery, along with details of how that measure was reached.
 
 At this time, tools such as Memcache and Redis, which can be used to increase system capacity further, are _not_ part of the architecture.
 
-#### Not used
+Not used
+--------
 
-*AWS*
+This section contains information on platforms & software which is not used in the delivery of this project, and any associated relevant detail.
 
-Although hosted on Digital Ocean, the system _should_ be compatible with _AWS Lambda_ using the Zappa wrapper, effectively allowing for serverless hosting / zero infrastructure.
+*Amazon Web Services*
+
+Although hosted on Digital Ocean rather than AWS, the system uses standard open-source tools for maximum compatibility with other hosting providers. Additionally, it  _should_ be compatible with _AWS Lambda_ using the Zappa wrapper, effectively allowing for serverless hosting / zero infrastructure.
 
 *PostgreSQL*
 
 I have experience with PostgreSQL but my expertise is undoubtedly in MySQL. Given that MySQL is an option, I have used it to minimise risk to delivery. 
 
-It is likely that much/all of the actual SQL used to interact with the database is already compatible with PostgreSQL. A review to confirm that, or to establish the cost of translation to make the system compatible with PostgreSQL, is possible but is not in scope for this project.
+It is likely that much/all of the actual SQL used to interact with the database is already compatible with PostgreSQL, especially given the use of SQLAlchemy by the server-side application. A review to confirm that, or to establish the cost of translation to make the system compatible with PostgreSQL, is possible but is not in scope for this project.
 
 *Angular*
 
