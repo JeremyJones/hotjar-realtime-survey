@@ -30,19 +30,19 @@ Delivery Detail
 
 #### Requirements restated
 
-This stage comprises the contents of the README file, which re-states the requirements.
+This milestone comprises the contents of the README file, which re-states the requirements.
 
 This milestone is considered *achieved* on Monday 22 January.
 
 #### Delivery Plan created
 
-This stage comprises the creation and approval of this document.
+This milestone comprises the creation and approval of _this document_.
 
 This milestone is expected 23-24 January.
 
 #### Architectural design
 
-The deliverables for this stage are:
+The deliverables for this milestone are:
 
 1. A file which describes the overall architecture of the solution, major platforms & third-party software, and how the components in each stage will fit together.
 2. Feedback for that plan, incorporated revisions, and broad approval to proceed.
@@ -77,9 +77,7 @@ This stage is expected to last 1-2 days.
 
 #### Demonstration
 
-The demonstration will take place tbc
-
-The demonstration session is expected to last n.
+The live demonstration session will be scheduled upon successful delivery and is expected to last one hour or more.
 
 #### Deliverables
 
@@ -92,4 +90,4 @@ Risks & Mitigation
 
 1. _Failure to meet expectations_ for deliverables may result in solution which is not usable. This will be mitigated by frequent reviews of plans and code to ensure the final deliverables meet or exceed expectations. Risk of occurring: Medium
 1. _Unexpected factors in first time components_ (namely API Star) may introduce delays to resolve. This will be mitigated by ensuring that the number of first-time components is as low as possible. Risk of occurring: Medium
-1. _Others to be identified_
+1. _Others tbc_
