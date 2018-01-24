@@ -1,12 +1,12 @@
 Architectural Design
 ====================
 
-This document is the primary detailed design document for this task. It does _not_ contain lists of requirements or other specification information, beyond that which is required to explain the system design and implementation procedure.
+This document is the primary design document for this task. It does _not_ contain requirements or other specification information, beyond that which is required to explain the details of the system design and implementation.
 
 Foundations
 -----------
 
-The server is a dual-CPU droplet from Digital Ocean with 2GB memory and 60GB disk space, located in Frankfurt, Germany. The operating system is Linux, variant Ubuntu 16.04 64-bit.
+The server is a dual-CPU droplet from Digital Ocean with 2GB memory and 60GB disk space, located in Frankfurt, Germany. The operating system is Linux, variant Ubuntu 16.04 64-bit. The server's IP address is 207.154.202.103 and can be accessed using the alias hotjar.jerjones.me
 
 The server is a single, self-contained web, application and database server.
 
@@ -26,7 +26,7 @@ The database is MySQL 5.7.
 
 #### Application
 
-The application is written in Python 3, using the API Star framework. The application accesses the database using the SQLAlchemy extension.
+The application is written in Python 3, using the [API Star](https://github.com/encode/apistar) framework. The application accesses the database using the SQLAlchemy extension.
 
 #### Web server
 
@@ -65,13 +65,15 @@ The table of responses (and potentially also the summary area) will include real
 Security
 --------
 
-The system will contain user data. The demonstration server will _not_ use SSL/HTTPS; thus the _hosting_ element will not be suitable for widespread production without appropriate certificates being procured & installed first.
+The system will contain user data. The demonstration server will _not_ use SSL/HTTPS; thus the _hosting_ element will not be suitable for widespread production use without appropriate certificates being procured & installed as a pre-requisite.
 
 The data & database will reside in the European Union.
 
 The server runs a firewall allowing access only on ports 80 and 22. SSH access to the server is only by public key to a named user account. (Direct access to other services, such as MySQL on port 3306, can be achieved using SSH tunnels.)
 
-Authorisation information including database passwords will be stored in the _environment_ and not in the codebase, following 12-factor app guidelines. The list of required environment variables for the system is contained in the file env.bash.example at the root level of the code repository.
+Although specific users can clearly be identified using this system, [Hotjar's privacy by product design](https://www.hotjar.com/blog/hotjar-approach-privacy) concept has been broadly influential in the design and presentation of the interface and its data.
+
+Authorisation information including database passwords will be stored in the _environment_ and not in the codebase, following [Twelve Factor App guidelines](https://12factor.net/config). The list of required environment variables for the system is contained in the file env.bash.example at the root level of the code repository.
 
 Access to the web pages for the survey and management dashboards will have specific additional security measures to be determined during those delivery stages.
 
@@ -87,9 +89,9 @@ Not used
 
 This section contains information on platforms & software which is not used in the delivery of this project, and any associated relevant detail.
 
-*Amazon Web Services*
+*Amazon Web Services (AWS)*
 
-Although hosted on Digital Ocean rather than AWS, the system uses standard open-source tools for maximum compatibility with other hosting providers. Additionally, it  _should_ be compatible with _AWS Lambda_ using the Zappa wrapper, effectively allowing for serverless hosting / zero infrastructure.
+Although hosted on Digital Ocean rather than AWS, the system uses standard open-source tools for maximum compatibility with other hosting providers. Additionally, it  _should_ be compatible with _AWS Lambda_ using the [Zappa](https://github.com/Miserlou/Zappa) wrapper, effectively allowing for serverless hosting / zero infrastructure.
 
 *PostgreSQL*
 
