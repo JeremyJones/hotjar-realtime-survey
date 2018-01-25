@@ -9,4 +9,4 @@ READMEcopy.txt
 *.psd
 __pycache__/*
 *.pyc
-
+app/.cache/*
