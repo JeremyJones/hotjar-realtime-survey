@@ -3,6 +3,32 @@ from apistar.renderers import HTMLRenderer
 
 
 @annotate(renderers=[HTMLRenderer()])
+def dashboard() -> str:
+    """
+    Return the HTML for the admin side management dashboard.
+    """
+    datavars = {}
+    return render_template('dashboard/dashboard.html', **datavars)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@annotate(renderers=[HTMLRenderer()])
 def hi() -> str:
     """
     Test of template processing.
@@ -18,4 +44,3 @@ def hello(username:str=None) -> dict:
 
     message = 'Welcome to the future, {who}!'
     return {'message': message.format(who=username or 'mystery person')}
-
