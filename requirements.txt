@@ -25,6 +25,7 @@ requests==2.18.4
 six==1.11.0
 sortedcontainers==1.5.9
 tox==2.9.1
+SQLAlchemy==1.2.2
 uritemplate==3.0.0
 urllib3==1.22
 virtualenv==15.1.0
