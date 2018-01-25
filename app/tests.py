@@ -1,7 +1,30 @@
 from apistar.test import TestClient
 from app import app
 from project.routes import hello
+from re import match
+from unittest import TestCase, skip
 
+
+class MyTest(TestCase):
+    """
+    Class for structured tests.
+    """
+    def setUp(self:TestCase) -> None:
+        pass
+    
+    def tearDown(self:TestCase) -> None:
+        pass
+
+    def test_this_class(self:TestCase) -> bool:
+        self.assertEqual(1, 1)
+
+    def test_templated_page(self:TestCase) -> bool:
+        """
+        Verify that the basic page templates are processing ok.
+        """
+        response = get_response('http://localhost:8080/hi')
+        self.assertEqual(b'<html>\n<h1>Hi Everybody!</h1>\n</html>',
+                        response.content)
 
 def default_page_return() -> dict:
     """
@@ -48,9 +71,4 @@ def test_proxy_http_request() -> bool:
     assert response.status_code == 200
     assert response.json() == default_page_return()
 
-def test_templated_page() -> bool:
-    """
-    Verify that the basic page templates are processing ok.
-    """
-    response = get_response('http://localhost:8080/hi')
-    assert len(response.content) > 10
+
