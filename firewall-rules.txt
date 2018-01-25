@@ -4,5 +4,6 @@ Status: active
      --                         ------      ----
 [ 1] 22                         ALLOW IN    Anywhere                  
 [ 2] 80                         ALLOW IN    88.98.252.50              
-[ 3] 22 (v6)                    ALLOW IN    Anywhere (v6)             
+[ 3] 80                         ALLOW IN    81.106.225.169            
+[ 4] 22 (v6)                    ALLOW IN    Anywhere (v6)             
 
