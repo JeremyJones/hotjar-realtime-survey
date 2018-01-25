@@ -24,3 +24,9 @@ Worked on Architecture Plan, completed 2pm.
 Worked on management dashboard design sketches & other ideas.
 Finding that putting off the build until multiple plans have been written, revised and approved is good for the look & feel (and hopefully implementation) of the ui.
 
+Thursday 25 January
+-------------------
+
+Started 11.50am (appointment in morning)
+APIStar installed & Nginx routes 1pm.
+Break 1-1.45pm
