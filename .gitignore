@@ -10,3 +10,5 @@ READMEcopy.txt
 __pycache__/*
 *.pyc
 app/.cache/*
+ignored/*
+
