@@ -31,3 +31,14 @@ To test the app:
 
 cd app
 apistar test
+
+
+Backup App
+----------
+
+The app comes bundled with a version of Quart, which is an asyncio version of Flask. To run it:
+
+cd app
+python flaskapp.py
+
+The backup app will run on port 5000.

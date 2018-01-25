@@ -9,20 +9,25 @@ def default_page_return() -> dict:
     """
     return {'message': "Welcome to the future, mystery person!"}
 
-
 def test_hello() -> bool:
     """
     Testing a view directly.
     """
-    data = hello()
+    data:dict = hello()
     assert data == default_page_return()
 
-def get_json_url(url, returnResponse=False) -> dict:
+def get_response(url:str):
+    """
+    Return a URL resource using the TestClient
+    """
+    client:TestClient = TestClient(app)
+    return client.get(url)
+
+def get_json_url(url:str, returnResponse:bool=False) -> dict:
     """
     Return the json content returned from a URL, parsed to a dict.
     """
-    client = TestClient(app)
-    response = client.get(url)
+    response = get_response(url)
     return response if returnResponse else response.json()
 
 def test_http_request() -> bool:
@@ -42,3 +47,10 @@ def test_proxy_http_request() -> bool:
                             returnResponse=True)
     assert response.status_code == 200
     assert response.json() == default_page_return()
+
+def test_templated_page() -> bool:
+    """
+    Verify that the basic page templates are processing ok.
+    """
+    response = get_response('http://localhost:8080/hi')
+    assert len(response.content) > 10
