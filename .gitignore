@@ -7,3 +7,6 @@ tmp/*
 env.bash
 READMEcopy.txt
 *.psd
+__pycache__/*
+*.pyc
+
