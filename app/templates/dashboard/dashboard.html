@@ -1,14 +1,30 @@
-<html>
+<html ng-app="dashboard">
 
 <head>
+    <title>Dashboard</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
-
+    <script src="/lib/dashboard.js"></script>
 </head>
 
-<body>
-    This is the dashboard HTML page.
+<body ng-controller="dashboardCtrl">
+
+    My greeting is: {ng fooname ng}
+
+    <input ng-model="name" ng-keyup="NameChange()" type="text" class="form-control" name="name" value="" />
+
+    <hr/> My inputname val is {ng name ng}
+    <hr/>
+
+    <h3>Welcome to the Dashboard</h3>
+
+    In this world 1 + 2 == {{ 1 + 2 }} <br/> and 1 + 2 == {ng 1 + 2 ng}
+
+    <hr/> {ng message ng}
+
 </body>
 
 </html>
