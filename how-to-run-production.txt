@@ -1,0 +1,9 @@
+Running in Production
+Running a WSGIApp project
+For WSGI applications, the recommended production deployment is Gunicorn, using the Meinheld worker.
+
+$ pip install gunicorn
+$ pip install meinheld
+$ gunicorn app:app --workers=4 --bind=0.0.0.0:5000 --pid=pid --worker-class=meinheld.gmeinheld.MeinheldWorker
+Typically you'll want to run as many workers as you have CPU cores on the server.
+

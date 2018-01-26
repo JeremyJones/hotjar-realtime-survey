@@ -12,6 +12,12 @@ def dashboard() -> str:
 
 
 
+@annotate(renderers=[HTMLRenderer()])
+def survey() -> str:
+    """
+    Return the HTML for the survey.
+    """
+    return render_template('survey/survey.html')
 
 
 
