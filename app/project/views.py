@@ -1,21 +1,26 @@
+"""
+Views for Survey task
+"""
+
 from apistar import render_template, annotate
 from apistar.renderers import HTMLRenderer
 
+from .settings import SETTINGS
 
 @annotate(renderers=[HTMLRenderer()])
-def hi() -> str:
+def dashboard() -> str:
     """
-    Test of template processing.
+    Return the HTML for the admin side management dashboard.
     """
     datavars = {}
-    return render_template('hieverybody.html', **datavars)
+    return "Hello. My env looks like this: {}".format(SETTINGS)
+
+    return render_template('dashboard/dashboard.html', **datavars)
 
 
-def hello(username:str=None) -> dict:
+@annotate(renderers=[HTMLRenderer()])
+def survey() -> str:
     """
-    Basic hello message to confirm proxying, function etc.
+    Return the HTML for the survey.
     """
-
-    message = 'Welcome to the future, {who}!'
-    return {'message': message.format(who=username or 'mystery person')}
-
+    return render_template('survey/survey.html')

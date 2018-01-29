@@ -1,0 +1,54 @@
+<html ng-app="dashboard">
+
+<head>
+    <title>Dashboard</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+
+    <script src="/lib/dashboard.js"></script>
+</head>
+
+<body ng-controller="dashboardCtrl">
+
+    <div class="controllerArea">
+
+        <div class="controllerFilter">
+
+            <input type="checkbox" name="includePartial" id="includePartialCheckbox" /><label for="includePartialCheckbox"> Include partially-completed surveys.</label>
+
+        </div>
+
+        <div class="visualisationArea">
+
+            [ Pie Graph of M/F split ]
+
+        </div>
+    </div>
+
+    <div class="detailArea">
+        <div id="detailTable">
+
+            This is the detail area.
+
+        </div>
+    </div>
+
+    <!--
+    My greeting is: {ng fooname ng} <input ng-model="name" ng-keyup="NameChange()" type="text" class="form-control" name="name" value="" />
+
+    <hr/> My inputname val is {ng name ng}
+    <hr/>
+
+    <h3>Welcome to the Dashboard</h3>
+
+    In this world 1 + 2 == {{ 1 + 2 }} <br/> and 1 + 2 == {ng 1 + 2 ng}
+
+    <hr/> {ng message ng}
+
+    -->
+
+</body>
+
+</html>

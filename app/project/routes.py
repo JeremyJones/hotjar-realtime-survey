@@ -1,17 +1,26 @@
-from apistar import Include, Route
-from project.views import hello, hi
-from apistar.handlers import docs_urls, static_urls, serve_static
+"""
+URL Routing for Survey task
+"""
+from apistar import Route
+
+# these next ones are for apistar's built-in admin/docs interface
+from apistar import Include
+from apistar.handlers import docs_urls
+
+#from project.views import hello, hi  # hello worlds
+from apistar.handlers import serve_static
+from project.views import dashboard
+from project.views import survey
 
 
-routes = [
-    Route('/', 'GET', hello),
-    Route('/hi', 'GET', hi),
+ROUTES = [
 
+    # Route('/', 'GET', hello),
+    # Route('/hi', 'GET', hi),
 
-    #Route('/dashboard', 'GET', hello),  # admin side
-    #Route('/survey', 'GET', hello),  # survey side
+    Route('/dashboard', 'GET', dashboard),  # admin page
+    Route('/survey', 'GET', survey),  # survey page
     Route('/lib/{path}', 'GET', serve_static),
 
-
-    Include('/docs', docs_urls)
+    Include('/docs', docs_urls)  # built-in admin ui
 ]

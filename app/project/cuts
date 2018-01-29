@@ -1,0 +1,46 @@
+
+@annotate(renderers=[HTMLRenderer()])
+def hi() -> str:
+    """
+    Test of template processing.
+    """
+    datavars = {}
+    return render_template('hieverybody.html', **datavars)
+
+
+def hello(username:str=None) -> dict:
+    """
+    Basic hello message to confirm proxying, function etc.
+    """
+
+    message = 'Welcome to the future, {who}!'
+    return {'message': message.format(who=username or 'mystery person')}
+
+
+app.controller('JAlerter', function($scope) {
+    $scope.alerts = [{
+            type: 'danger',
+            msg: 'Oh snap! Change and try again.'
+        },
+        {
+            type: 'success',
+            msg: 'Well done! You read this alert message.'
+        }
+    ];
+
+    $scope.addAlert = function() {
+        $scope.alerts.push({ msg: 'Another alert!' });
+    };
+
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+    };
+});
+
+        <div ng-controller="JAlerter">
+
+            <script type="text/ng-template" id="alert.html">
+                <div ng-transclude></div>
+            </script>
+
+        </div>
