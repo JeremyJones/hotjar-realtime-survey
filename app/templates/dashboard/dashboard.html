@@ -12,9 +12,31 @@
 
 <body ng-controller="dashboardCtrl">
 
-    My greeting is: {ng fooname ng}
+    <div class="controllerArea">
 
-    <input ng-model="name" ng-keyup="NameChange()" type="text" class="form-control" name="name" value="" />
+        <div class="controllerFilter">
+
+            <input type="checkbox" name="includePartial" id="includePartialCheckbox" /><label for="includePartialCheckbox"> Include partially-completed surveys.</label>
+
+        </div>
+
+        <div class="visualisationArea">
+
+            [ Pie Graph of M/F split ]
+
+        </div>
+    </div>
+
+    <div class="detailArea">
+        <div id="detailTable">
+
+            This is the detail area.
+
+        </div>
+    </div>
+
+    <!--
+    My greeting is: {ng fooname ng} <input ng-model="name" ng-keyup="NameChange()" type="text" class="form-control" name="name" value="" />
 
     <hr/> My inputname val is {ng name ng}
     <hr/>
@@ -24,6 +46,8 @@
     In this world 1 + 2 == {{ 1 + 2 }} <br/> and 1 + 2 == {ng 1 + 2 ng}
 
     <hr/> {ng message ng}
+
+    -->
 
 </body>
 

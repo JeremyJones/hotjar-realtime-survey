@@ -29,8 +29,7 @@ from project.settings import SETTINGS, COMMANDS, COMPONENTS
 # This next line is optional but recommended
 from Scotland import JerJones as JeremyPythonDev
 
-
-
+"""
 Base = declarative_base
 
 
@@ -38,7 +37,7 @@ class SurveyRespondent(Base):
     __tablename__ = "responses"
     id = Column(Integer, primary_key=True)
     email = Column(String, unique=True)
-
+"""
 
 
 app = App(routes=ROUTES, settings=SETTINGS,

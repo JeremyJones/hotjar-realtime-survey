@@ -16,7 +16,8 @@ class Env(environment.Environment):
     """
     properties = {
         'DEBUG': typesystem.boolean(default=False),
-        'DATABASE_URL': typesystem.string(default='sqlite:///example.db')
+        'DATABASE_URL': typesystem.string(default='mysql://surveyWriter:bD5mX9BD5RPwargthE0IxUN4GTbtvR@localhost/realtime_survey_responses')
+        #'DATABASE_URL': typesystem.string(default='sqlite:///example.db')
     }
 
 ENV = Env()
