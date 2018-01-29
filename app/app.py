@@ -22,9 +22,12 @@ from sqlalchemy import String
 
 from apistar.backends import sqlalchemy_backend
 
+from project.models import Question
+from project.models import Response
+from project.models import Answer
+
 from project.routes import ROUTES
 from project.settings import SETTINGS, COMMANDS, COMPONENTS
-
 
 # This next line is optional but recommended
 from Scotland import JerJones as JeremyPythonDev

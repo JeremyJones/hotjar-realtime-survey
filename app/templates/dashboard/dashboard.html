@@ -16,17 +16,34 @@
 
         <div class="controllerFilter">
 
-            <input type="checkbox" name="includePartial" id="includePartialCheckbox" /><label for="includePartialCheckbox"> Include partially-completed surveys.</label>
+          <input checked="checked" disabled="true" value="includePartial" type="checkbox" name="includePartial" id="includePartialCheckbox" /><label for="includePartialCheckbox"> Include partially-completed surveys.</label>
+
+	  
 
         </div>
 
         <div class="visualisationArea">
-
-            [ Pie Graph of M/F split ]
-
+	  <div class="summaryAnswer">
+	    Number of surveys:
+	    <div class="sAnswer"></div>
+	  </div>
+	  <div class="summaryAnswer">
+	    Average age of respondents:
+	    <div id="sAnswerAge" class="sAnswer"></div>
+	  </div>
+	  <div class="summaryAnswer">
+	    Gender Ratio:
+	    <div id="sAnswerGender" class="sAnswer"></div>
+	  </div>
+	  <div class="summaryAnswer">
+	    Top 3 Colors:
+	    <div id="sAnswerColors" class="sAnswer"></div>
+	  </div>
         </div>
     </div>
 
+    <hr/>
+    
     <div class="detailArea">
         <div id="detailTable">
 

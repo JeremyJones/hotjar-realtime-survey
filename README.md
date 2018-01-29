@@ -9,11 +9,7 @@ Installation
 ```
 git clone https://bitbucket.org/hotjar/dev-task-jeremy.git
 cd dev-task-jeremy
-cp env.bash.example env.bash
-vim env.bash   <-- edit if required
-
-cd app
-pip3 install -r requirements.txt
+pip3 install -r app/requirements.txt
 ```
 
 Quickstart
@@ -54,17 +50,5 @@ coreapi get http://localhost/docs/schema/
 and from there you can query the system application, retrieve views, and make changes:
 
 ```
-coreapi action hi
+coreapi action get_questions
 ```
-
-Backup App
-----------
-
-The app comes bundled with a version of Quart, which is an asyncio version of Flask. To run it:
-
-```
-cd app
-python flaskapp.py
-```
-
-The backup app will run on port 5000.
