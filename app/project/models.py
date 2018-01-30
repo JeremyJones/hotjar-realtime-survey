@@ -9,8 +9,11 @@ class Question(Base):
 
     id = Column(Integer, primary_key=True)
     survey_id = Column(Integer, default=0)
-    question_id = Column(Integer, default=1)
+    order_in_list = Column(Integer, default=1)
+    required = Column()
     question = Column(String)
+    answer_type = Column(String)
+    answer_options = Column(String)
     
 
 class Response(Base):

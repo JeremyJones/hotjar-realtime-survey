@@ -8,7 +8,7 @@ newapp.config(['$interpolateProvider', function($interpolateProvider) {
 
 newapp.controller("dashboardCtrl", function($scope) {
 
-    $scope.message = "Hello you guys";
+    $scope.message = "Hello";
 
     $scope.NameChange = function() {
         //console.log("NameChange: the value is " + $scope.name);
@@ -17,15 +17,36 @@ newapp.controller("dashboardCtrl", function($scope) {
 });
 
 
-
 var app = {
 
+    summary: null,
     responses: null,
 
+    drawSummary: function () {
+	app.log("Drawing summary");
+	$("#sAnswerCount").text(app.summary.num_responses);
+    },
+    
     start: function () {
-	app.fillResponses(function () {
-		app.log("Ready");
+	app.getSummary(function () {
+		app.log("Summary returned");
+		app.fillResponses(function () {
+			app.log("Responses returned");
+		    });
 	    });
+    },
+
+    getSummary: function (cb=null) {
+	$.ajax({url: "/summary",
+		param_cb: cb,
+		success: function (d) {
+		    app.summary = d;
+		    app.log("Assigned summary");
+		    app.drawSummary();
+
+		    if ("undefined" != typeof(this.param_cb))
+			this.param_cb();
+		}});
     },
     
     fillResponses: function (cb=null) {
@@ -44,13 +65,7 @@ var app = {
     log: function (m) {
 	console.log(m);
     }
-}
+};
     
 google.charts.load('current', {'packages':['table']});
-//google.charts.setOnLoadCallback(drawTable);
 google.charts.setOnLoadCallback(app.start);
-	    
-//Backbone.Collection.extend({url:'/responses'});
-//responses.fetch();
-
-
