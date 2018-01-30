@@ -12,9 +12,6 @@ from project.settings import COMMANDS
 from project.settings import COMPONENTS
 from project.routes import ROUTES
 
-# This next line is optional but recommended
-from Scotland import JerJones as JeremyPythonDev
-
 
 app = App(routes=ROUTES, settings=SETTINGS,
           commands=COMMANDS, components=COMPONENTS)
