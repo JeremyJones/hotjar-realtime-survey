@@ -32,14 +32,26 @@ def survey() -> str:
     return render_template('survey/survey.html', **datavars)
 
 
+def get_identifier(session: Session) -> dict:
+    """Based on the incoming request, return a structure containing
+    identifying information for this user, and the current
+    question/screen we think they're on.
+    """
+    return {"eui": "abcdefghijklmnop",
+            "scr": 1}
+
+
 def get_questions(session: Session) -> dict:
     """
-    API: Retrieve a JSON list of the questions
+    API: Retrieve a list of the questions in JSON format
     """
     queryset = session.query(Question).\
-               filter_by(survey_id = 0).all()
+               filter_by(survey_id = 0).\
+               order_by(Question.order_in_list).\
+               all()
     
     return {"_items": [{"question": question.question,
+                        "required": question.required,
                         "id": question.id,
                         "answer_type": question.answer_type,
                         "answer_options": question.answer_options}

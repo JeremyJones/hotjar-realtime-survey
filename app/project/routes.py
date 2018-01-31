@@ -16,6 +16,7 @@ from project.views import get_questions
 from project.views import get_responses
 from project.views import get_summary
 from project.views import answer_question
+from project.views import get_identifier
 
 
 ROUTES = [
@@ -33,6 +34,7 @@ ROUTES = [
     Route('/responses', 'GET', get_responses),
     Route('/summary', 'GET', get_summary),
     Route('/answer', 'POST', answer_question),
+    Route('/getIdentifier', 'POST', get_identifier),
     
     # Others
     Include('/docs', docs_urls)  # built-in admin ui
