@@ -63,7 +63,7 @@ def answer_question(session: Session) -> dict:
     """
     API: POST an answer into the database, from an end-user
     """
-    return {}
+    return {"status":"OK"}
 
 
 def get_responses(session: Session) -> dict:
