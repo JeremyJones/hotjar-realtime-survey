@@ -21,8 +21,12 @@ class Response(Base):
     
     id = Column(Integer, primary_key=True)
     survey_id = Column(Integer, nullable=False, default=0)
+    end_user_id = Column(String)
     started_at = Column(Integer, nullable=False)
     is_completed = Column()
+
+    def __init__(self):
+        pass
     
 
 class Answer(Base):

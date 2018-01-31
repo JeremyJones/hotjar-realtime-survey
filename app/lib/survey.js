@@ -44,22 +44,21 @@ var app = {
 	var existingId = Cookies.get('mid');
 
 	if ("undefined" != typeof(existingId))
-	    app.myIdentifier = JSON.parse(existingId);
+	    app.myIdentifier = existingId;
 	else
 	    $.ajax({'url': '/getIdentifier',
 			'method': 'POST',
 			'success': function (id) {
 			app.myIdentifier = id;
 			// answer posting should set the cookie:
-			//Cookies.set('mid', JSON.stringify(id));
+			//Cookies.set('mid', id); // struct ok
 		    }});
     },
     
     "drawScreen": function (questions=app.questions, targetDiv=app.config.targetDiv) {
 
 	var screenquestions = [],
-	sliceStart = ((app.myIdentifier.scr - 1) *
-		      app.config.questionsPerScreen),
+	sliceStart = app.myIdentifier.que - 1
 	sliceEnd = sliceStart + app.config.questionsPerScreen;
 	
 	screenquestions = questions.slice(sliceStart,sliceEnd);
