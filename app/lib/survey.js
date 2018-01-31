@@ -13,7 +13,7 @@ var app = {
 
     /*
 
-    */
+     */
 
     "config": {"questionsPerScreen": 2,
 	       "targetDiv": $("#surveySays")},
@@ -24,13 +24,56 @@ var app = {
     "_readyFails": 0,
     //
     //
+    "lastAnswers": {},
+    //
+    //
+
+    "sendAnswer": function () { // my callback to be run on blur or keyup
+	var my_val = $(this).val(),
+	    my_id = $(this).attr('id');
+
+	// don't send empty answers when the page is first loaded
+	if (my_val === "" && "undefined" == typeof(app.lastAnswers[my_id]))
+	    return false;
+	
+	// don't send answers which are the same as what's already been saved
+	if ("undefined" != typeof(app.lastAnswers[my_id]))
+	    if (my_val == app.lastAnswers[my_id])
+		return false;
+	
+	$.ajax({'url': '/answer',
+		'method': 'POST',
+		'data': {
+		    "q": my_id,
+		    "a": my_val,
+		    "who": app.myIdentifier.eui
+		},
+		'processData': true,
+		// passthrough data for the callback function:
+		'pt_id': my_id,
+		'pt_val': my_val,
+		//
+		'success': function (d) {
+		    if (d.status && d.status == 'OK' && this.pt_val) {
+			
+			app.lastAnswers[this.pt_id] = this.pt_val;
+			
+			var target = "#tick4" + this.pt_id;
+			$(target).html('<i class="fa fa-check"></i>');
+
+			// successful answer posting (or in progress answer)
+			// also sets the cookie:
+			Cookies.set('mid', app.myIdentifier, {path:''}); // struct ok
+		    }
+		}});
+    },
+    
     "getQuestions": function() {
         $.ajax({
             'url': '/questions',
             'success': function(d) {
-		    app.questions = d._items
-            }
-        });
+		app.questions = d._items;
+	    }});
     },
 
     "setIdentifier": function () {
@@ -47,18 +90,16 @@ var app = {
 	    app.myIdentifier = existingId;
 	else
 	    $.ajax({'url': '/getIdentifier',
-			'method': 'POST',
-			'success': function (id) {
+		    'method': 'POST',
+		    'success': function (id) {
 			app.myIdentifier = id;
-			// answer posting should set the cookie:
-			//Cookies.set('mid', id); // struct ok
 		    }});
     },
     
     "drawScreen": function (questions=app.questions, targetDiv=app.config.targetDiv) {
 
 	var screenquestions = [],
-	sliceStart = app.myIdentifier.que - 1
+	    sliceStart = app.myIdentifier.que - 1
 	sliceEnd = sliceStart + app.config.questionsPerScreen;
 	
 	screenquestions = questions.slice(sliceStart,sliceEnd);
@@ -67,9 +108,9 @@ var app = {
 
     "renderQuestion": function (question) {
 	var html = '',
-	answerHTML = '',
-	answerTick = '<div style="display:inline" class="tick" id="tick4answer2question' + question.id + '"></div>',
-	addHandlers = null;
+	    answerHTML = '',
+	    answerTick = '<div style="display:inline" class="tick" id="tick4answer2question' + question.id + '"></div>',
+	    addHandlers = null;
 
 	if (question.answer_type.match(/^(?:text|email)$/)) {
 	    answerHTML = '<input type="' + question.answer_type + '" ' +
@@ -79,25 +120,8 @@ var app = {
 		' /> ';
 
 	    addHandlers = function () {
-
-		var mycall = function () { // my callback to be run on blur or keyup
-				      $.ajax({'url': '/answer',
-						  'param__id': $(this).attr('id'),
-						  'method': 'POST',
-						  'data': {"q": $(this).attr('id'),
-						      "a": $(this).val(),
-						      "who": app.myIdentifier.eui},
-						  'processData': true,
-						  'success': function (d) {
-						  if (d.status && d.status == 'OK') {
-						      var target = "#tick4" + this.param__id;
-						      $(target).html('<i class="fa fa-check"></i>');
-						  }
-					      }});
-		};
-
-		$("#answer2question" + question.id).on("keyup", mycall);
-		$("#answer2question" + question.id).on("blur", mycall);
+		$("#answer2question" + question.id).on("keyup", app.sendAnswer);
+		$("#answer2question" + question.id).on("blur", app.sendAnswer);
 	    };
 	}
 	else {
@@ -105,12 +129,12 @@ var app = {
 	}
 	
 	html = '<div class="row input-group"><div class="col">' +
-	'<label for="answer2question' + question.id + '" >' +
-	question.question + ': ' +
-	'</label>' + 
-	'</div><div class="col">' +
-	answerHTML + answerTick + 
-	'</div></div>';
+	    '<label for="answer2question' + question.id + '" >' +
+	    question.question + ': ' +
+	    '</label>' + 
+	    '</div><div class="col">' +
+	    answerHTML + answerTick + 
+	    '</div></div>';
 	
 	return [html, addHandlers];
     },
@@ -118,7 +142,7 @@ var app = {
     "renderQuestions": function (qs, target) {
 	
 	var html = '<form class="form form-condensed">',
-	counter, toRender = [], handlers = [], h = null;
+	    counter, toRender = [], handlers = [], h = null;
 
 	for (counter = 0; counter < qs.length; ++counter) {
 	    

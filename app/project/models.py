@@ -36,5 +36,6 @@ class Answer(Base):
     response_id = Column(Integer)
     question_id = Column(String)
     in_progress = Column()
+    answered_at = Column(Integer)
 
     answer = Column(String)

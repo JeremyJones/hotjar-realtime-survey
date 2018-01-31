@@ -108,10 +108,45 @@ def get_questions(session: Session) -> dict:
     }
 
 
-def answer_question(session: Session) -> dict:
+def answer_question(data: http.RequestData, session: Session) -> dict:
     """
     API: POST an answer into the database, from an end-user
     """
+    try:
+        who = data['who']
+        question_id = int(data['q'][15:])  # remove the 'answer2question' substring
+        answer_val = data['a']
+    except KeyError:
+        return {"status":"ERR"}
+
+    # get the responder (the 'who')
+    responder = session.query(Response).\
+                filter(Response.end_user_id == who,
+                       Response.survey_id >= 0).\
+                first()
+    
+    # get the question
+    question = session.query(Question).get(question_id)
+
+    if not (responder and question):
+        return {"status":"ERR"}
+    
+    #
+    # new or existing answer
+    answer = session.query(Answer).filter_by(response_id = responder.id,
+                                             question_id = question.id).first()
+
+    if not answer:
+        answer = Answer(response_id = responder.id,
+                        question_id = question.id)
+
+    answer.answered_at = dt.now().timestamp()
+    answer.answer = answer_val
+    answer.in_progress = 'N'  # required field. not implemented at the field-level.
+
+    session.add(answer)
+    session.flush()
+        
     return {"status":"OK"}
 
 
