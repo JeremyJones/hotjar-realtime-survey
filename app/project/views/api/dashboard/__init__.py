@@ -1,5 +1,4 @@
 """
-API handlers for the Survey task (admin dashboard side)
 """
 
 from datetime import datetime as dt
@@ -12,6 +11,38 @@ from sqlalchemy import func
 
 from project.models import Response, Answer
 from project.settings import SETTINGS
+
+def get_summary(session: Session) -> dict:
+    """
+    API: Get a JSON structure of summary data, for the admin page
+    """
+
+    try:  # https://stackoverflow.com/questions/14754994/why-is-sqlalchemy-count-much-slower-than-the-raw-query
+        num_responses = session.query(func.count(func.distinct(Answer.response_id))).first()[0]
+    except Exception:
+        num_responses = 0
+
+    try:
+        average_age = float(session.execute('SELECT AVG(CAST(answer AS UNSIGNED)) FROM answers ' +
+                                            'WHERE question_id = %d' % 3).first()[0])
+    except Exception:
+        average_age = None
+        
+    gender_ratio = None
+    top_3_colors = None
+
+    try:
+        last_updated:int = session.query(Answer).filter_by(survey_id = 0).\
+                           order_by(Answer.answered_at.desc()).limit(1).\
+                           first().answered_at
+    except TypeError:
+        last_updated:int = dt.now().timestamp()
+
+    return {"updated_at": last_updated,
+            "average_age": average_age,
+            "colors": top_3_colors,
+            "gender_ratio": gender_ratio,
+            "num_responses": num_responses}
 
 
 def get_responses(data: http.RequestData, session: Session) -> dict:
@@ -56,36 +87,3 @@ def get_responses(data: http.RequestData, session: Session) -> dict:
         
     
     return {"_items": items, "_items_checksum": checksum, "count": surveys_count}
-
-
-def get_summary(session: Session) -> dict:
-    """
-    API: Get a JSON structure of summary data, for the admin page
-    """
-
-    try:  # https://stackoverflow.com/questions/14754994/why-is-sqlalchemy-count-much-slower-than-the-raw-query
-        num_responses = session.query(func.count(func.distinct(Answer.response_id))).first()[0]
-    except Exception:
-        num_responses = 0
-
-    try:
-        average_age = float(session.execute('SELECT AVG(CAST(answer AS UNSIGNED)) FROM answers ' +
-                                            'WHERE question_id = %d' % 3).first()[0])
-    except Exception:
-        average_age = None
-        
-    gender_ratio = None
-    top_3_colors = None
-
-    try:
-        last_updated:int = session.query(Answer).filter_by(survey_id = 0).\
-                           order_by(Answer.answered_at.desc()).limit(1).\
-                           first().answered_at
-    except TypeError:
-        last_updated:int = dt.now().timestamp()
-
-    return {"updated_at": last_updated,
-            "average_age": average_age,
-            "colors": top_3_colors,
-            "gender_ratio": gender_ratio,
-            "num_responses": num_responses}
