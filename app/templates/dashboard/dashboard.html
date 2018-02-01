@@ -16,7 +16,8 @@
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     
-    <script src="/lib/dashboard.js"></script>
+    <script type="text/javascript" src="/lib/moment-with-locales.js"></script>
+    <script type="text/javascript" src="/lib/dashboard.js"></script>
 </head>
 
 <body ng-controller="dashboardCtrl">
@@ -33,7 +34,7 @@
 
         <div class="visualisationArea">
 	  <div class="summaryAnswer">
-	    Number of surveys:
+	    Number of completed surveys:
 	    <div id="sAnswerCount" class="sAnswer"></div>
 	  </div>
 	  <div class="summaryAnswer">
@@ -48,6 +49,9 @@
 	    Top 3 Colors:
 	    <div id="sAnswerColors" class="sAnswer"></div>
 	  </div>
+	  <div class="summaryAnswer">
+	    Last updated:
+	    <div id="sLastUpdated" class="sAnswer"></div>
         </div>
     </div>
 

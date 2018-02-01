@@ -1,14 +1,13 @@
-from re import match
-
 def valid_option(option: str, options: list) -> bool:
     """Take an <option> value and verify that it exists in the supplied
        list of options. (Value may require type conversion.)
     """
-    if answer.answer in selectoptions:
+    if option in options:
         return True
-    else:
-        # check for string->int conversion
-        if match(r'^\d+$', answer.answer) and type(selectoptions[0]) is int:
-            return int(answer.answer) in selectoptions
-        else:
-            return False
+    elif len(options) and type(options[0]) is int:
+        try:
+            return int(option) in options
+        except Exception:
+            pass
+        
+    return False

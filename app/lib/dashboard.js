@@ -21,19 +21,27 @@ var app = {
 
     summary: null,
     responses: null,
-
-    drawSummary: function () {
-	app.log("Drawing summary");
-	$("#sAnswerCount").text(app.summary.num_responses);
-    },
-    
+    responses_checksum: null,
+    //
+    start_time: new Date(),
+    realtime_refresh_delay: 1.5,
+    //
     start: function () {
 	app.getSummary(function () {
 		app.log("Summary returned");
-		app.fillResponses(function () {
-			app.log("Responses returned");
-		    });
+		app.fillResponses();
+		
+		setInterval(function () {
+			if (app.live_updates()) {
+			    app.fillResponses();
+			    app.getSummary();
+			}}, 1000 * app.realtime_refresh_delay);
 	    });
+    },
+
+    live_updates: function () {
+	var time_now = new Date();
+	return time_now.valueOf() - app.start_time.valueOf() < (43200 * 1000);
     },
 
     getSummary: function (cb=null) {
@@ -45,10 +53,35 @@ var app = {
 		    app.log("Assigned summary");
 		    app.drawSummary();
 
-		    if ("undefined" != typeof(this.param_cb))
+		    if ("function" == typeof(this.param_cb))
 			this.param_cb();
 		}});
     },
+    
+    drawSummary: function () {
+	app.log("Drawing summary");
+	app.displaySummaryDataPoints();
+	app.drawLastUpdatedText();
+    },
+    
+    displaySummaryDataPoints: function () {
+	app.log("Re-drawing summary");
+	app.fillDataConditional($("#sAnswerCount"), app.summary.num_responses);
+	app.fillDataConditional($("#sAnswerAge"), app.summary.average_age);
+	app.fillDataConditional($("#sAnswerGender"), app.summary.gender_ratio);
+	app.fillDataConditional($("#sAnswerColors"), app.summary.colors);
+    },
+
+    fillDataConditional: function (target, content) {
+	if (target.text() != content)
+	    target.text(content);
+    },
+
+    drawLastUpdatedText: function () {
+	$("#sLastUpdated").html(moment(app.summary.updated_at, "X").fromNow());
+    },
+
+    
     
     fillResponses: function (cb=null) {
 	$.ajax({url: "/responses",
@@ -56,14 +89,22 @@ var app = {
 		param_cb: cb,
 		success: function (d) {
 		    app.responses = d._items;
+		    app.responses_checksum = d._items_checksum;
+		    
 		    app.log("Assigned responses");
 		    app.log("my responses are " + app.responses.length + " long");
 
-		    if ("undefined" != typeof(this.param_cb))
+		    if ("function" == typeof(this.param_cb))
 			this.param_cb();
 		}});
     },
     
+    /*
+      Application logging function defaults to no-op, optionally overridden.
+     */
+    log: function (m) {
+	return;
+    },
     log: function (m) {
 	console.log(m);
     }
