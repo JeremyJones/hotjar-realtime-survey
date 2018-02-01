@@ -2,8 +2,7 @@
 Group of handlers for server-generated HTML pages.
 """
 
-from apistar import annotate
-from apistar import render_template
+from apistar import annotate, render_template
 from apistar.renderers import HTMLRenderer
 
 

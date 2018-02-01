@@ -10,8 +10,8 @@ from apistar import http
 from apistar.backends.sqlalchemy_backend import Session
 from sqlalchemy import func
 
-from project.models import Response
-from project.models import Answer
+from project.models import Response, Answer
+
 
 def get_responses(data: http.RequestData, session: Session) -> dict:
     """
@@ -58,7 +58,11 @@ def get_summary(session: Session) -> dict:
         
     gender_ratio = None
     top_3_colors = None
-    last_updated = dt.now().isoformat()
+    #last_updated = dt.now().isoformat()
+
+    last_updated = session.query(Answer).filter_by(survey_id = 0).\
+                   order_by(Answer.answered_at.desc()).limit(1).\
+                   first()[0]
 
     return {"updated_at": last_updated,
             "average_age": average_age,

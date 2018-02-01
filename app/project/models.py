@@ -33,9 +33,11 @@ class Answer(Base):
     __tablename__ = 'answers'
     
     id = Column(Integer, primary_key=True)
+    survey_id = Column(Integer)
     response_id = Column(Integer)
     question_id = Column(String)
     in_progress = Column()
+    valid_answer = Column()
     answered_at = Column(Integer)
 
     answer = Column(String)

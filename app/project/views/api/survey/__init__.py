@@ -7,11 +7,9 @@ from datetime import datetime as dt
 from apistar import http
 from apistar.backends.sqlalchemy_backend import Session
 
-from project.models import Question
-from project.models import Response
-from project.models import Answer
-
-from project.utils import validate_answer
+from project.models import Question, Response, Answer
+from project.utils.validators import validate_answer
+from project.settings import SETTINGS
 
 
 def answer_question(data: http.RequestData, session: Session) -> dict:
@@ -19,36 +17,41 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
     API: POST an answer into the database, from an end-user
     """
     try:
-        who = data['who']
-        question_id = int(data['q'][15:])  # remove the 'answer2question' substring
-        answer_val = data['a']
+        who:str = data['who']
+        question_id:int = int(data['q'][15:])  # remove the 'answer2question' substring
+        answer_val:str = data['a']
+
     except(KeyError, TypeError):
         return {"status":"ERR"}
 
-    # get the responder (the 'who')
-    responder = session.query(Response).\
-                filter(Response.end_user_id == who,
-                       Response.survey_id >= 0).\
-                first()
-    
-    # get the question
-    question = session.query(Question).get(question_id)
+    try:
+        survey_id:int = SETTINGS['SURVEY_ID']
+    except KeyError:
+        survey_id:int = 0
 
-    if not (responder and question):
+    question:Question = session.query(Question).get(question_id)
+
+    responder:Response = session.query(Response).\
+                         filter(Response.end_user_id == who,
+                                Response.survey_id == survey_id).\
+                                first()
+    
+    try:
+        answer:Answer = session.query(Answer).filter_by(response_id = responder.id,
+                                                        question_id = question.id).\
+                                                        first() \
+        or Answer(response_id = responder.id,
+                  survey_id   = survey_id,
+                  question_id = question.id)
+        
+    except TypeError:
         return {"status":"ERR"}
     
-    #
-    # new or existing answer
-    answer = session.query(Answer).filter_by(response_id = responder.id,
-                                             question_id = question.id).first()
-
-    if not answer:
-        answer = Answer(response_id = responder.id,
-                        question_id = question.id)
-
     answer.answered_at = dt.now().timestamp()
     answer.answer = answer_val
     answer.in_progress = 'Y'
+    answer.valid_answer = 'Y' if validate_answer(question, answer) else 'N'
+
     session.add(answer)
 
     # you can only answer one question at a time really, so answering
@@ -60,6 +63,4 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
     
     session.commit()
 
-    validAnswer = validate_answer(question, answer)
-    
-    return {"status":"OK", "validAnswer": validAnswer}
+    return {"status":"OK", "validAnswer": bool(answer.valid_answer == 'Y')}

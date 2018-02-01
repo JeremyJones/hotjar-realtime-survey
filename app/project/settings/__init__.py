@@ -20,7 +20,9 @@ class Env(environment.Environment):
 
 ENV = Env()
 
-SETTINGS = {
+SETTINGS:dict = {
+    'SURVEY_ID': 0,  # implement to run multiple
+    #
     'DATABASE': {
         'URL': ENV['DATABASE_URL'],
         'METADATA': Base.metadata
