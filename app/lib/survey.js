@@ -145,6 +145,28 @@ var app = {
 		$("#answer2question" + question.id).on("blur", app.sendAnswer);
 	    };
 	}
+	else if (question.answer_type == 'select') {
+	    answerHTML = '<select id="answer2question' + question.id + '" ' +
+	    ' class="form-control mAnswer" ' +
+	    ' ><option>Please select</option>';
+
+	    var answerOptions = [];
+	    
+	    _.each(JSON.parse(question.answer_options),
+		   function (o) {
+		       var so = new String(o);
+		       app.log("adding option " + so);
+		       answerOptions.push('<option value="' + so + '">' +
+					  so + '</option>')
+		   });
+
+	    answerHTML += answerOptions.join("\n");
+	    answerHTML += '</select>';
+
+	    addHandlers = function () {
+		$("#answer2question" + question.id).on("change", app.sendAnswer);
+	    };
+	}
 	else {
 	    answerHTML = '[' + question.answer_type + ' unimplemented]';
 	}
