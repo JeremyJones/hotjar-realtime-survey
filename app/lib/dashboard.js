@@ -24,7 +24,7 @@ var app = {
     responses_checksum: null,
     //
     start_time: new Date(),
-    realtime_refresh_delay: 1.5,
+    realtime_refresh_delay: 2.62,
     //
     start: function () {
 	app.getSummary(function () {
@@ -80,8 +80,6 @@ var app = {
     drawLastUpdatedText: function () {
 	$("#sLastUpdated").html(moment(app.summary.updated_at, "X").fromNow());
     },
-
-    
     
     fillResponses: function (cb=null) {
 	$.ajax({url: "/responses",
