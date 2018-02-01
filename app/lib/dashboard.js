@@ -26,14 +26,16 @@ var app = {
     start_time: new Date(),
     realtime_refresh_delay: 2.62,
     //
+    networkFail: false,
+    //
     start: function () {
 	app.getSummary(function () {
 		app.log("Summary returned");
-		app.fillResponses();
+		app.getResponses();
 		
 		setInterval(function () {
 			if (app.live_updates()) {
-			    app.fillResponses();
+			    app.getResponses();
 			    app.getSummary();
 			}}, 1000 * app.realtime_refresh_delay);
 	    });
@@ -41,6 +43,9 @@ var app = {
 
     live_updates: function () {
 	var time_now = new Date();
+
+	if (app.networkFail) return false;
+	
 	return time_now.valueOf() - app.start_time.valueOf() < (43200 * 1000);
     },
 
@@ -48,7 +53,11 @@ var app = {
 	$.ajax({url: "/summary",
 		method: "POST",
 		param_cb: cb,
+		error: function () {
+		    app.networkFail = true;
+		},
 		success: function (d) {
+		    app.networkFail = false;
 		    app.summary = d;
 		    app.log("Assigned summary");
 		    app.drawSummary();
@@ -81,11 +90,15 @@ var app = {
 	$("#sLastUpdated").html(moment(app.summary.updated_at, "X").fromNow());
     },
     
-    fillResponses: function (cb=null) {
+    getResponses: function (cb=null) {
 	$.ajax({url: "/responses",
 		method: "POST",
 		param_cb: cb,
+		error: function () {
+		    app.networkFail = true;
+		},
 		success: function (d) {
+		    app.networkFail = false;
 		    app.responses = d._items;
 		    app.responses_checksum = d._items_checksum;
 		    

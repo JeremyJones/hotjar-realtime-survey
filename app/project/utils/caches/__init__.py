@@ -1,4 +1,4 @@
-from . import redis
+from .redis import r
 
 def cached_or_cache(func):
     """If we have a cached version of the function then return

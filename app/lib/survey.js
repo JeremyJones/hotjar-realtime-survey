@@ -53,7 +53,7 @@ var app = {
 			// feedback for successful answers
 			if (d.validAnswer) {
 			    var target = "#tick4" + this.pt_id;
-			    $(target).html('<i class="fa fa-check"></i>');
+			    $('i.fa', target).addClass('fa-check');
 			    app.lastAnswers[this.pt_id]['validated'] = true;
 			}
 
@@ -111,6 +111,15 @@ var app = {
 		       'Finish</a></div>');
     },
 
+    "finalise": function () {
+	$.ajax({url:'/finalise',
+		async: false,
+		method: 'POST',
+		success: function (d) {
+		    app.drawThankyou();
+		}});
+    },
+    
     "setScreen": function (s) {  // set the app.current_screen variable
 	app.current_screen = s;
     },
@@ -146,6 +155,8 @@ var app = {
 						 app.lastAnswers[lastAnswerKey]['validated']);
 				      });
 
+	return true;  // just now ###
+	
 	if (! allAnswersValid) {
 	    alert('Please answer all required fields.');
 	    return false;
@@ -158,7 +169,7 @@ var app = {
 	var html = '',
 	    answerHTML = '',
 	    answerTick = ('<div style="display:inline" class="tick" id="tick4answer2question'
-			  + question.id + '"></div>'),
+			  + question.id + '"><i class="fa fa-block"></i></div>'),
 	    postRenderCallback = null;
 
 	if (question.answer_type.match(/^(?:text(?:area)?|email)$/)) {
@@ -280,7 +291,7 @@ var app = {
 				  }
 				  
 				  if (app.myIdentifier.que > app.questions.length)
-				      app.drawThankyou();
+				      app.finalise();
 				  else 
 				      app.drawScreen();
 				  

@@ -12,6 +12,7 @@ from sqlalchemy import func
 from project.models import Response, Answer
 from project.settings import SETTINGS
 
+
 def get_summary(session: Session) -> dict:
     """
     API: Get a JSON structure of summary data, for the admin page
@@ -84,6 +85,5 @@ def get_responses(data: http.RequestData, session: Session) -> dict:
                                     SETTINGS['SURVEY_ID']).first()[0])
     except Exception:
         surveys_count = 0
-        
     
     return {"_items": items, "_items_checksum": checksum, "count": surveys_count}

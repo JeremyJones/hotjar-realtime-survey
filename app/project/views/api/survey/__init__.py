@@ -64,3 +64,20 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
     session.commit()
 
     return {"status":"OK", "validAnswer": bool(answer.valid_answer == 'Y')}
+
+
+def finalise(data: http.RequestData, session: Session) -> dict:
+    """
+    API: Complete a survey
+    """
+    try:
+        who:str = data['who']
+    except KeyError:
+        return {}
+
+    raise RuntimeError(who)
+
+    # session.query(Response).\
+    #     filter(Response.end_user_id == who).\
+    #
+    # pass
