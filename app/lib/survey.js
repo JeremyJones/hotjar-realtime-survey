@@ -113,9 +113,11 @@ var app = {
 
     "finalise": function () {
 	$.ajax({url:'/finalise',
+		data: {"who":app.myIdentifier.eui},
 		async: false,
 		method: 'POST',
 		success: function (d) {
+		    Cookies.remove('mid', {path:''});
 		    app.drawThankyou();
 		}});
     },

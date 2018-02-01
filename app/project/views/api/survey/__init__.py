@@ -54,6 +54,9 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
 
     session.add(answer)
 
+    responder.last_at = int(dt.now().timestamp())
+    session.add(responder)
+
     # you can only answer one question at a time really, so answering
     # a question also sets any of your other answers to not 'in progress'
     session.query(Answer).\
@@ -72,12 +75,11 @@ def finalise(data: http.RequestData, session: Session) -> dict:
     """
     try:
         who:str = data['who']
-    except KeyError:
+    except TypeError:
         return {}
 
-    raise RuntimeError(who)
+    session.query(Response).\
+        filter(Response.end_user_id == who,
+               Response.is_completed == '').update({Response.is_completed: 'Y'})
 
-    # session.query(Response).\
-    #     filter(Response.end_user_id == who).\
-    #
-    # pass
+    return {}

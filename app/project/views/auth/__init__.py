@@ -38,7 +38,7 @@ def make_new_response(session: Session) -> Response:
                         time=dt.now().isoformat())
     
     identifier.end_user_id = sha256(longstring.encode('utf-8')).hexdigest()
-    identifier.started_at = int(dt.now().timestamp())
+    identifier.last_at = identifier.started_at
     identifier.is_completed = ''
         
     session.add(identifier)
@@ -53,7 +53,8 @@ def get_identifier(session: Session) -> dict:
     question/screen we think they're on.
     """
     responder:Response = session.query(Response).\
-                         filter_by(end_user_id = extract_identifier()).\
+                         filter_by(is_completed = '',
+                                   end_user_id = extract_identifier()).\
                          first() or make_new_response(session)   # simple factory
         
     try:

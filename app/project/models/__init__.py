@@ -1,3 +1,5 @@
+from datetime import datetime as dt
+
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 
@@ -23,10 +25,11 @@ class Response(Base):
     survey_id = Column(Integer, nullable=False, default=0)
     end_user_id = Column(String)
     started_at = Column(Integer, nullable=False)
+    last_at = Column(Integer)
     is_completed = Column()
 
     def __init__(self):
-        pass
+        self.last_at = int(dt.now().timestamp())
     
 
 class Answer(Base):
