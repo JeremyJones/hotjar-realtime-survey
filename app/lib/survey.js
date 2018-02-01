@@ -74,6 +74,7 @@ var app = {
     "getQuestions": function() {
         $.ajax({
             'url': '/questions',
+	    'method': 'POST',
             'success': function(d) {
 		app.questions = d._items;
 	    }});
@@ -162,17 +163,15 @@ var app = {
     "renderQuestions": function (qs, target) {
 	
 	var html = '<form id="mForm" class="form form-condensed">',
-	    counter, toRender = [], handlers = [], h = null;
+	    handlers = [], tmp = null;
 
-	for (counter = 0; counter < qs.length; ++counter) {
-	    
-	    toRender = app.renderQuestion(qs[counter]);
-	    
-	    html += toRender[0] + '<hr/>';
+	_.each(qs, function (thisQuestion) {
+		var toRender = app.renderQuestion(thisQuestion);
+		html += toRender[0] + '<hr/>';
 
-	    if (toRender[1])
-		handlers.push(toRender[1]);
-	}
+		if (toRender[1])
+		    handlers.push(toRender[1]);
+	    });
 
 	// add back & next buttons
 	html += '<a href="#" class="backnext btn btn-secondary btn-block" id="backButton">' +
@@ -207,7 +206,7 @@ var app = {
 	target.html(html);
 
 	if (handlers.length > 0)
-	    for (h in handlers) handlers[h]();
+	    for (tmp in handlers) handlers[tmp]();
 	
 	$(".mAnswer").first().focus();
     },

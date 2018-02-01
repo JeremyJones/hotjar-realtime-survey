@@ -6,6 +6,7 @@ from datetime import datetime as dt
 from re import match
 from hashlib import sha256
 from random import SystemRandom
+from json import dumps
 
 from apistar import http
 from apistar import annotate
@@ -177,23 +178,31 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
     return {"status":"OK", "validAnswer": validAnswer}
 
 
-def get_responses(session: Session) -> dict:
+def get_responses(data: http.RequestData, session: Session) -> dict:
     """
     API: Return the most recent 1000 responses, for the admin page.
     """
-    return {"_items": [{"id": r.id, "started_at": r.started_at,
-                        "is_completed": r.is_completed,
-                        "answers": [{"question_id": a.question_id,
-                                     "in_progress": a.in_progress,
-                                     "answer": a.answer}
-                                    for a in session.query(Answer).\
-                                    filter_by(response_id = r.id).\
-                                    all()]
-                        }
-                       for r in session.query(Response).\
-                       order_by(Response.started_at.desc()).\
-                       limit(1000).all()]
-            }
+    items = [{"id": r.id, "started_at": r.started_at,
+              "is_completed": r.is_completed,
+              "answers": [{"question_id": a.question_id,
+                           "in_progress": a.in_progress,
+                           "answer": a.answer}
+                          for a in session.query(Answer).\
+                          filter_by(response_id = r.id).\
+                          all()]}
+             for r in session.query(Response).\
+             order_by(Response.started_at.desc()).\
+             limit(1000).all()]
+
+    checksum = sha256(dumps(items).encode('utf-8')).hexdigest()
+
+    try:
+        if data['checksum'] == checksum:
+            return {}
+    except(KeyError, TypeError):
+        pass
+    
+    return {"_items": items, "_items_checksum": checksum}
 
 
 def get_summary(session: Session) -> dict:

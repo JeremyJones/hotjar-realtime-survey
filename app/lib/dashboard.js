@@ -38,6 +38,7 @@ var app = {
 
     getSummary: function (cb=null) {
 	$.ajax({url: "/summary",
+		method: "POST",
 		param_cb: cb,
 		success: function (d) {
 		    app.summary = d;
@@ -51,6 +52,7 @@ var app = {
     
     fillResponses: function (cb=null) {
 	$.ajax({url: "/responses",
+		method: "POST",
 		param_cb: cb,
 		success: function (d) {
 		    app.responses = d._items;

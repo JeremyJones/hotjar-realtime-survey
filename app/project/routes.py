@@ -29,9 +29,9 @@ ROUTES = [
     Route('/lib/{path}', 'GET', serve_static),
 
     # API URLs
-    Route('/questions', 'GET', get_questions),
-    Route('/responses', 'GET', get_responses),
-    Route('/summary', 'GET', get_summary),
+    Route('/questions', 'POST', get_questions),
+    Route('/responses', 'POST', get_responses),
+    Route('/summary', 'POST', get_summary),
     Route('/answer', 'POST', answer_question),
     Route('/getIdentifier', 'POST', get_identifier),
     
