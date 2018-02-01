@@ -58,8 +58,11 @@ var app = {
 			
 			app.lastAnswers[this.pt_id] = this.pt_val;
 			
-			var target = "#tick4" + this.pt_id;
-			$(target).html('<i class="fa fa-check"></i>');
+			// feedback for successful answers
+			if (d.validAnswer) {
+			    var target = "#tick4" + this.pt_id;
+			    $(target).html('<i class="fa fa-check"></i>');
+			}
 
 			// successful answer posting (or in progress answer)
 			// also sets the cookie:
@@ -86,40 +89,57 @@ var app = {
 	
 	var existingId = Cookies.get('mid');
 
-	if ("undefined" != typeof(existingId))
-	    app.myIdentifier = existingId;
-	else
+	if ("undefined" == typeof(existingId)) { // new session
 	    $.ajax({'url': '/getIdentifier',
 		    'method': 'POST',
 		    'success': function (id) {
 			app.myIdentifier = id;
 		    }});
+	}
+	else { // cookie-d user
+	    if ("string" == typeof(existingId))
+		existingId = JSON.parse(existingId);
+	    
+	    app.myIdentifier = existingId;
+	}
+    },
+
+    "drawThankyou": function (targetDiv=app.config.targetDiv) {
+	targetDiv.html("Thank you. The survey is now complete.");
     },
     
     "drawScreen": function (questions=app.questions, targetDiv=app.config.targetDiv) {
 
 	var screenquestions = [],
-	    sliceStart = app.myIdentifier.que - 1
+	    sliceStart = parseInt(app.myIdentifier["que"]) - 1,
 	sliceEnd = sliceStart + app.config.questionsPerScreen;
-	
+
 	screenquestions = questions.slice(sliceStart,sliceEnd);
+
 	return app.renderQuestions(screenquestions, targetDiv);
     },
 
     "renderQuestion": function (question) {
 	var html = '',
 	    answerHTML = '',
-	    answerTick = '<div style="display:inline" class="tick" id="tick4answer2question' + question.id + '"></div>',
+	    answerTick = ('<div style="display:inline" class="tick" id="tick4answer2question'
+			  + question.id + '"></div>'),
 	    addHandlers = null;
 
 	if (question.answer_type.match(/^(?:text|email)$/)) {
 	    answerHTML = '<input type="' + question.answer_type + '" ' +
 		' class="form-control mAnswer" ' +
+		' value="" ' +
 		' id="answer2question' + question.id + '" ' +
 		(question.required == 'y' ? ' required="true" ' : '') +
 		' /> ';
 
 	    addHandlers = function () {
+
+		var lastAnswerKey = "answer2question" + question.id;
+		if ("undefined" != typeof(app.lastAnswers[lastAnswerKey]))
+		    $("#answer2question" + question.id).val(app.lastAnswers[lastAnswerKey]);
+		
 		$("#answer2question" + question.id).on("keyup", app.sendAnswer);
 		$("#answer2question" + question.id).on("blur", app.sendAnswer);
 	    };
@@ -138,10 +158,10 @@ var app = {
 	
 	return [html, addHandlers];
     },
-    
+
     "renderQuestions": function (qs, target) {
 	
-	var html = '<form class="form form-condensed">',
+	var html = '<form id="mForm" class="form form-condensed">',
 	    counter, toRender = [], handlers = [], h = null;
 
 	for (counter = 0; counter < qs.length; ++counter) {
@@ -153,7 +173,36 @@ var app = {
 	    if (toRender[1])
 		handlers.push(toRender[1]);
 	}
+
+	// add back & next buttons
+	html += '<a href="#" class="backnext btn btn-secondary btn-block" id="backButton">' +
+	    '<i class="fa fa-arrow-left"></i> Previous</a> ' +
+	    '&nbsp;' +
+	    '<a href="#" class="backnext btn btn-primary btn-block" id="nextButton">' +
+	    'Next <i class="fa fa-arrow-right"></i></a>';
+	
 	html += '</form>';
+
+	handlers.push(function () {
+	    $(".backnext").on('click',
+			      function () {
+				  if ($(this).attr('id') == 'nextButton') {
+				      // need to verify that any 'required' or 'requiredUnique'
+				      // questions have been correctly-answered.
+				      app.myIdentifier.que += app.config.questionsPerScreen;
+				  }
+				  else {
+				      app.myIdentifier.que -= app.config.questionsPerScreen;
+				  }
+				  
+				  if (app.myIdentifier.que > app.questions.length)
+				      app.drawThankyou();
+				  else 
+				      app.drawScreen();
+				  
+				  return false;
+			      });
+	});
 	
 	target.html(html);
 

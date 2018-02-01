@@ -3,11 +3,15 @@ Views for Survey task
 """
 
 from datetime import datetime as dt
+from re import match
+from hashlib import sha256
+from random import SystemRandom
 
-from apistar import render_template, annotate
+from apistar import http
+from apistar import annotate
+from apistar import render_template
 from apistar.renderers import HTMLRenderer
 from apistar.backends.sqlalchemy_backend import Session
-from apistar import http
 from sqlalchemy import func
 
 from werkzeug.http import dump_cookie
@@ -18,8 +22,16 @@ from project.models import Question
 from project.models import Response
 from project.models import Answer
 
-from random import SystemRandom
-from hashlib import sha256
+from validate_email import validate_email
+
+
+@annotate(renderers=[HTMLRenderer()])
+def homepage() -> str:
+    """
+    Return the HTML for a home page placeholder.
+    """
+    datavars = {}
+    return render_template('homepage.html', **datavars)
 
 
 @annotate(renderers=[HTMLRenderer()])
@@ -67,7 +79,7 @@ def get_identifier(session: Session) -> dict:
         identifier.is_completed = ''
         
         session.add(identifier)
-        session.flush()
+        session.commit()
 
         question_no = 1
     else:
@@ -108,6 +120,19 @@ def get_questions(session: Session) -> dict:
     }
 
 
+def validate_answer(question: Question, answer: Answer) -> bool:
+    """Given a Question and Answer object, return True/False if the
+    answer given is a valid answer according to that question's
+    validation rules (e.g. email etc.).
+    """
+    if question.answer_type == 'text':
+        return bool(question.required == 'n' or len(answer.answer) > 0)
+    elif question.answer_type == 'email':
+        return bool(validate_email(answer.answer))
+    else:
+        return False
+
+
 def answer_question(data: http.RequestData, session: Session) -> dict:
     """
     API: POST an answer into the database, from an end-user
@@ -142,12 +167,14 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
 
     answer.answered_at = dt.now().timestamp()
     answer.answer = answer_val
-    answer.in_progress = 'N'  # required field. not implemented at the field-level.
+    answer.in_progress = 'N'  # required db field not implemented at this level.
 
     session.add(answer)
-    session.flush()
-        
-    return {"status":"OK"}
+    session.commit()
+
+    validAnswer = validate_answer(question, answer)
+    
+    return {"status":"OK", "validAnswer": validAnswer}
 
 
 def get_responses(session: Session) -> dict:

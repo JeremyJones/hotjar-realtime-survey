@@ -7,10 +7,10 @@ from apistar import Route
 from apistar import Include
 from apistar.handlers import docs_urls
 
-#from project.views import hello, hi  # hello worlds
 from apistar.handlers import serve_static
 from project.views import dashboard
 from project.views import survey
+from project.views import homepage
 
 from project.views import get_questions
 from project.views import get_responses
@@ -21,8 +21,7 @@ from project.views import get_identifier
 
 ROUTES = [
 
-    # Route('/', 'GET', hello),
-    # Route('/hi', 'GET', hi),
+    Route('/', 'GET', homepage),
 
     # HTML pages & static URLs
     Route('/dashboard', 'GET', dashboard),  # admin page
