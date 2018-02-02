@@ -261,19 +261,31 @@ var app = {
 	}
 	else if (question.answer_type == 'radio' || question.answer_type == 'checkbox') {
 	    answerHTML = '<div class="form-group">';
+	    var theseoptions = [];
 
 	    _.each(JSON.parse(question.answer_options),
 		   function (o) {
 		       var tnow = new Date(),
 			   mmid = ("" + tnow.valueOf()).substring(-4) + "a2q" + question.id;
-		       
-		       answerHTML += '<div class="form-check"><input type="' +
-			   question.answer_type + '" ' +
-			   ' id="' + mmid + '" ' +
-			   ' class="form-check-input" name="answer2question' + question.id +
-			   '" value="' + o + '" /><label class="form-check-label"' +
-			   ' for="' + mmid + '">' + o + '</label></div>';
+
+		       theseoptions.push('<div class="form-check"><input type="' +
+					 question.answer_type + '" ' +
+					 ' id="' + mmid + '" ' +
+					 ' class="form-check-input" name="answer2question' + question.id +
+					 '" value="' + o + '" /><label class="form-check-label"' +
+					 ' for="' + mmid + '">' + o + '</label></div>');
 		   });
+
+	    if (theseoptions.length < 5)
+		answerHTML += theseoptions.join("\n");
+	    else {
+		var sliceat = parseInt(theseoptions.length/2);
+
+		answerHTML += '<table class="table table-condensed"><tr>' +
+		    '<td>' + theseoptions.slice(0,sliceat).join("\n") +
+		    '</td><td>' + theseoptions.slice(sliceat+1,theseoptions.length).join("\n") +
+		    '</td></tr></table>';
+	    }
 	    
 	    answerHTML += '</div>';
 
@@ -290,11 +302,11 @@ var app = {
 	
 	html = '<div xstyle="border-width:1px; border-style:solid; border-color:black" class="row input-group"><div class="col">' +
 	    '<label for="answer2question' + question.id + '" >' +
-	    question.question + 
+	    question.question + ':' + 
 	    (question.required == 'y'
 	     ? '<sup><small class="danger"><i class="fa fa-asterisk" title="required"></i></small></sup>'
 	     : '') +
-	    ': ' +
+	    ' ' +
 	    '</label>' + 
 	    '</div>' +
 	    '<div class="col">' + answerHTML + '</div><div class="col">' + answerTick + '</div>' +

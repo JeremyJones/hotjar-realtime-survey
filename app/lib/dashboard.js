@@ -2,6 +2,7 @@ var app = {
 
     config: { 
 	realtime_refresh_delay: 2.62,  // default refresh check time
+	realtime_refresh_delay: 1,     // overridden refresh time
 	number_of_hours_to_run: 0.25,  // how long to run until going into standby
 	enable_live_dots: false        // whether to try to display those dots on fields in progress
     },
@@ -84,10 +85,15 @@ var app = {
 						    function (ans) {
 							return ans.question_id == q.id;
 						    }),
-				  answer = answers.join(', '),
+				  answer = _.find(resp.answers,
+						  function (ans) {
+						      return ans.question_id == q.id;
+						  }),
 				  tableCell = "",
 				  showDots = false;
 
+			      //app.log("a are " + answers);
+			      
 			      if (answer) {
 
 				  if (q.answer_type === 'email' && answer.in_progress != 'Y')
@@ -150,17 +156,28 @@ var app = {
 	    }}, 250);
     },
 
+    formatMaleFemale: function (r) {
+	var html = "", looper = null;
+
+	for (looper in r) {
+	    html += '<i class="fa fa-' + looper.toLowerCase() + '"></i> ' +
+		looper + ' ' + r[looper] + '<br/>'
+	}
+	
+	return html;
+    },
+    
     displaySummaryDataPoints: function () {
 	//app.log("Re-drawing summary");
 	app.fillDataConditional($("#sAnswerCount"), app.runtime.data.summary.num_responses);
-	app.fillDataConditional($("#sAnswerAge"), app.runtime.data.summary.average_age);
-	app.fillDataConditional($("#sAnswerGender"), app.runtime.data.summary.gender_ratio);
-	app.fillDataConditional($("#sAnswerColors"), app.runtime.data.summary.colors);
+	app.fillDataConditional($("#sAnswerAge"), Math.round(app.runtime.data.summary.average_age));
+	app.fillDataConditional($("#sAnswerGender"), app.formatMaleFemale(app.runtime.data.summary.gender_ratio));
+	app.fillDataConditional($("#sAnswerColors"), app.runtime.data.summary.top_3_colors.join(', '));
     },
 
     fillDataConditional: function (target, content) {
-	if (target.text() != content)
-	    target.text(content);
+	if (target.html() != content)
+	    target.html(content);
     },
 
     drawLastUpdatedText: function () {

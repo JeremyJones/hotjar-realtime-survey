@@ -15,10 +15,18 @@ from project.utils.caches.memcache import mc
 
 from .. import get_questions
 
+# encapsulated behaviours
+from .behaviours.average_age import get_average_age
+from .behaviours.gender_ratio import get_gender_ratio
+from .behaviours.top_3_colors import get_top_3_colors
+
 
 def dashboard_data(data: http.RequestData, session: Session) -> dict:
+    """
+    API: Single call for a structure of data for the dashboard.
+    """
 
-    cachekey = 'dashboard_data'
+    cachekey:str = 'dashboard_data'
     cached = mc.get(cachekey)
 
     if cached:
@@ -30,18 +38,21 @@ def dashboard_data(data: http.RequestData, session: Session) -> dict:
         except TypeError:
             pass
         
-    dashdata = {
+    dashdata:dict = {
         "questions": get_questions(session),
         "responses": get_responses(data, session),
         "summary": get_summary(session)
     }
 
     try:
-        cache_time = SETTINGS['MEMCACHED_DASHBOARD_DATA']
+        cache_time:int = SETTINGS['MEMCACHED_DASHBOARD_DATA']
     except KeyError:
-        cache_time = 1
+        cache_time:int = 1
     finally:
         mc.set(cachekey, dashdata, cache_time)
+
+    if 'last' in data and data['last'] == dashdata['responses']['_items_checksum']:
+        return {"status":304,"recached":True}
         
     return dashdata
 
@@ -52,18 +63,13 @@ def get_summary(session: Session) -> dict:
     """
 
     try:  # https://stackoverflow.com/questions/14754994/why-is-sqlalchemy-count-much-slower-than-the-raw-query
-        num_responses = session.query(func.count(func.distinct(Answer.response_id))).first()[0]
+        num_responses:int = session.query(func.count(func.distinct(Answer.response_id))).first()[0]
     except Exception:
-        num_responses = 0
+        num_responses:int = 0
 
-    try:
-        average_age = float(session.execute('SELECT AVG(CAST(answer AS UNSIGNED)) FROM answers ' +
-                                            'WHERE question_id = %d' % 3).first()[0])
-    except Exception:
-        average_age = None
-        
-    gender_ratio = None
-    top_3_colors = None
+    average_age:float = get_average_age(session)
+    gender_ratio:dict = get_gender_ratio(session)
+    top_3_colors:list = get_top_3_colors(session)
 
     try:
         last_updated:int = session.query(Answer).filter_by(survey_id = 0).\
@@ -74,7 +80,7 @@ def get_summary(session: Session) -> dict:
 
     return {"updated_at": last_updated,
             "average_age": average_age,
-            "colors": top_3_colors,
+            "top_3_colors": top_3_colors,
             "gender_ratio": gender_ratio,
             "num_responses": num_responses}
 
@@ -83,26 +89,26 @@ def get_responses(data: http.RequestData, session: Session) -> dict:
     """
     API: Return the most recent non-empty responses, for the admin page.
     """
-    items = [{"id": r.id, "started_at": r.started_at,
-              "is_completed": r.is_completed,
-              "answers": [{"question_id": a.question_id,
-                           "in_progress": a.in_progress,
-                           "answer": a.answer}
-                          for a in session.query(Answer).\
-                          filter_by(response_id = r.id).\
-                          all()]}
-             for r in session.query(Response).\
-             order_by(Response.started_at.desc()).\
-             limit(1000).all()]
+    items:list = [{"id": r.id, "started_at": r.started_at,
+                   "is_completed": r.is_completed,
+                   "answers": [{"question_id": a.question_id,
+                                "in_progress": a.in_progress,
+                                "answer": a.answer}
+                               for a in session.query(Answer).\
+                               filter_by(response_id = r.id).\
+                               all()]}
+                  for r in session.query(Response).\
+                  order_by(Response.started_at.desc()).\
+                  limit(1000).all()]
     
     if 'SHOW_EMPTY_SURVEYS' in SETTINGS and \
        SETTINGS['SHOW_EMPTY_SURVEYS']:
         pass
     else:
-        items = list(filter(lambda surv: len(surv['answers']) > 0,
-                            items))
+        items:list = list(filter(lambda surv: len(surv['answers']) > 0,
+                                 items))
 
-    checksum = sha256(dumps(items).encode('utf-8')).hexdigest()
+    checksum:str = sha256(dumps(items).encode('utf-8')).hexdigest()
 
     try:
         if data['checksum'] == checksum:
@@ -112,11 +118,11 @@ def get_responses(data: http.RequestData, session: Session) -> dict:
 
     # add a count of all of them
     try:
-        surveys_count = int(session.\
-                            execute('SELECT COUNT(DISTINCT(response_id)) ' + \
-                                    'FROM answers WHERE survey_id = %d ' %
-                                    SETTINGS['SURVEY_ID']).first()[0])
+        surveys_count:int = int(session.\
+                                execute('SELECT COUNT(DISTINCT(response_id)) ' + \
+                                        'FROM answers WHERE survey_id = %d ' %
+                                        SETTINGS['SURVEY_ID']).first()[0])
     except Exception:
-        surveys_count = 0
+        surveys_count:int = 0
     
     return {"_items": items, "_items_checksum": checksum, "count": surveys_count}

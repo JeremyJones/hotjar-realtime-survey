@@ -11,7 +11,7 @@ def homepage() -> str:
     """
     Return the HTML for a home page (convenience page of project links).
     """
-    datavars = {}
+    datavars:dict = {}
     return render_template('homepage.html', **datavars)
 
 
@@ -20,7 +20,7 @@ def survey() -> str:
     """
     Return the HTML for the survey.
     """
-    datavars = {}
+    datavars:dict = {}
     return render_template('survey/survey.html', **datavars)
 
 
@@ -29,5 +29,5 @@ def dashboard() -> str:
     """
     Return the HTML for the admin side management dashboard.
     """
-    datavars = {}
+    datavars:dict = {}
     return render_template('dashboard/dashboard.html', **datavars)
