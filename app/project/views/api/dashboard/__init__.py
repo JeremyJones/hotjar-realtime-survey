@@ -11,10 +11,12 @@ from sqlalchemy import func
 
 from project.models import Response, Answer
 from project.settings import SETTINGS
+from .. import get_questions
 
 
 def dashboard_data(data: http.RequestData, session: Session) -> dict:
     return {
+        "questions": get_questions(session),
         "responses": get_responses(data, session),
         "summary": get_summary(session)
     }

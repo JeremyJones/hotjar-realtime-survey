@@ -31,7 +31,7 @@ class Response(Base):
 
     def __init__(self):
         self.last_at = int(dt.now().timestamp())
-    
+
 
 class Answer(Base):
     __tablename__ = 'answers'

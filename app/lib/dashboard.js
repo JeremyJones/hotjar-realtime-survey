@@ -1,74 +1,55 @@
-/*
-var newapp = angular.module("dashboard", []);
-
-newapp.config(['$interpolateProvider', function($interpolateProvider) {
-    $interpolateProvider.startSymbol('{ng ');
-    $interpolateProvider.endSymbol(' ng}');
-}]);
-
-
-newapp.controller("dashboardCtrl", function($scope) {
-
-    $scope.message = "Hello";
-
-    $scope.NameChange = function() {
-        //console.log("NameChange: the value is " + $scope.name);
-        $scope.fooname = "hello " + $scope.name;
-    };
-});
-
-
-*/
 var app = {
 
-    realtime_refresh_delay: 2.62,    // config option
+    config: { 
+	realtime_refresh_delay: 2.62,    // config options
+	number_of_hours_to_run: 3
+    },
     //
+    runtime: {
+	data: null,
+	data_checksum: null,
+	start_time: new Date(),
+	networkFail: false
+    },
+    /*
     summary: null,
+    questions: null,
     responses: null,
     responses_checksum: null,
+    */
+    
     //
-    start_time: new Date(),
-    networkFail: false,
     live_updates: function () {  // -> bool
+	if (app.runtime.networkFail) return false;
+	
 	var time_now = new Date();
 
-	if (app.networkFail) return false;
-	
-	return time_now.valueOf() - app.start_time.valueOf() < (43200 * 1000);
+	return(time_now.valueOf() - app.runtime.start_time.valueOf()
+	       < (1000 * 3600 * app.config.number_of_hours_to_run));
     },
     // ---
     
     start: function () {
 	app.getDashData();
 	app.loopDashData();
-	
-	// setTimeout(function () {
-	// 	app.loopDashData();
-	//     }, 1000 * app.realtime_refresh_delay);
-	/*
-	app.getSummary(function () {
-		app.log("Summary returned");
-		app.getResponses();
-		
-		setInterval(function () {
-			if (app.live_updates()) {
-			    app.getResponses();
-			    app.getSummary();
-			}}, 1000 * app.realtime_refresh_delay);
-	    });
-	*/
     },
 
     getDashData: function () {
 	$.ajax({"url": "/dashdata",
 		"method": "POST",
+		"error": function () {
+		    app.runtime.networkFail = true;
+		},
 		"success": function (d) {
-		    app.summary = d.summary;
-		    app.responses = d.responses._items;
-		    app.responses_checksum = d.responses._items_checksum;
 
+		    if (app.runtime.data_checksum)
+			if (app.runtime.data_checksum === d.responses._items_checksum)
+			    return;
+
+		    app.runtime.data = d;
 		    app.drawSummary();
-		    return;
+		    app.drawTable();
+		    app.runtime.data_checksum = d.responses._items_checksum;
 		}});
     },
 
@@ -76,45 +57,74 @@ var app = {
 	setInterval(function () {
 		if (app.live_updates()) {
 		    app.getDashData();
-		    /*
-		    app.getResponses();
-		    app.getSummary();
-		    */
-		}}, 1000 * app.realtime_refresh_delay);
+		} else {
+		    app.drawLastUpdatedText(); // just the momentjs update
+		}}, 1000 * app.config.realtime_refresh_delay);
     },
-    
-    /*
-    getSummary: function (cb=null) {
-	$.ajax({url: "/summary",
-		method: "POST",
-		param_cb: cb,
-		error: function () {
-		    app.networkFail = true;
-		},
-		success: function (d) {
-		    app.networkFail = false;
-		    app.summary = d;
-		    app.log("Assigned summary");
-		    app.drawSummary();
-
-		    if ("function" == typeof(this.param_cb))
-			this.param_cb();
-		}});
-    },
-    */
     
     drawSummary: function () {
 	app.log("Drawing summary");
 	app.displaySummaryDataPoints();
 	app.drawLastUpdatedText();
     },
-    
+
+    drawTable: function () {
+	var data = new google.visualization.DataTable();
+	
+	_.each(app.runtime.data.questions._items,
+	       function (q) {
+		   data.addColumn('string', q.question);
+	       });
+
+	data.addColumn('boolean', 'Completed');
+
+	_.each(app.runtime.data.responses._items,
+	       function (r) {
+
+		   var responseData = [];
+		   _.each(app.runtime.data.questions._items,
+			  function (q) {
+			      var answer = _.find(r.answers,
+						  function (a) {
+						      return a.question_id == q.id;
+						  }),
+				  tableCell = "";
+
+			      if (answer) {
+
+				  tableCell = answer.answer;
+
+				  if (answer.in_progress == 'Y' && r.is_completed != 'Y') {
+				      tableCell += '<span style="font-size:24px" ' +
+					  'class="saving"><span>.</span><span>.</span><span>.</span></span>';
+				  }
+				  responseData.push(tableCell);
+
+			      } else {
+				  responseData.push(null);
+			      }
+			  });
+
+		   if (r.is_completed == 'Y') {
+		       responseData.push(true);
+		   } else {
+		       responseData.push(false);
+		   }
+		   
+		   data.addRow(responseData);
+	       });
+
+	var table = new google.visualization.Table(document.getElementById('latable'));
+	
+	table.draw(data, {showRowNumber: false, allowHtml: true});
+    },
+
     displaySummaryDataPoints: function () {
 	app.log("Re-drawing summary");
-	app.fillDataConditional($("#sAnswerCount"), app.summary.num_responses);
-	app.fillDataConditional($("#sAnswerAge"), app.summary.average_age);
-	app.fillDataConditional($("#sAnswerGender"), app.summary.gender_ratio);
-	app.fillDataConditional($("#sAnswerColors"), app.summary.colors);
+	app.fillDataConditional($("#sAnswerCount"), app.runtime.data.summary.num_responses);
+	app.fillDataConditional($("#sAnswerAge"), app.runtime.data.summary.average_age);
+	app.fillDataConditional($("#sAnswerGender"), app.runtime.data.summary.gender_ratio);
+	app.fillDataConditional($("#sAnswerColors"), app.runtime.data.summary.colors);
     },
 
     fillDataConditional: function (target, content) {
@@ -123,30 +133,8 @@ var app = {
     },
 
     drawLastUpdatedText: function () {
-	$("#sLastUpdated").html(moment(app.summary.updated_at, "X").fromNow());
+	$("#sLastUpdated").html(moment(app.runtime.data.summary.updated_at, "X").fromNow());
     },
-    
-    /*
-    getResponses: function (cb=null) {
-	$.ajax({url: "/responses",
-		method: "POST",
-		param_cb: cb,
-		error: function () {
-		    app.networkFail = true;
-		},
-		success: function (d) {
-		    app.networkFail = false;
-		    app.responses = d._items;
-		    app.responses_checksum = d._items_checksum;
-		    
-		    app.log("Assigned responses");
-		    app.log("my responses are " + app.responses.length + " long");
-
-		    if ("function" == typeof(this.param_cb))
-			this.param_cb();
-		}});
-    },
-    */
     
     /*
       Application logging function defaults to no-op, optionally overridden.
