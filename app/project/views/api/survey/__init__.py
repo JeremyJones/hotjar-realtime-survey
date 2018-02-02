@@ -19,8 +19,6 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
     try:
         who:str = data['who']
         question_id:int = int(data['q'][15:])  # remove the 'answer2question' substring
-        answer_val:str = data['a']
-
     except(KeyError, TypeError):
         return {"status":"ERR"}
 
@@ -35,14 +33,38 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
                          filter(Response.end_user_id == who,
                                 Response.survey_id == survey_id).\
                                 first()
+
+    
+    if 'z' in data and data['z'] == 'delete':  # clear stored answers (e.g. for checkboxes)
+        answers = session.query(Answer).\
+                  filter(Answer.response_id == responder.id,
+                         Answer.question_id == question.id)
+
+        answers.delete(synchronize_session='fetch')
+        return {}
+    
     
     try:
-        answer:Answer = session.query(Answer).filter_by(response_id = responder.id,
-                                                        question_id = question.id).\
-                                                        first() \
-        or Answer(response_id = responder.id,
-                  survey_id   = survey_id,
-                  question_id = question.id)
+        answer_val:str = data['a']
+    except KeyError:
+        return {"status":"ERR"}
+
+    # checkboxes have multiple values, so they're always new
+    # answers. other types overwrite their values.
+    
+    try:
+        if question.answer_type == 'checkbox':
+            answer:Answer = Answer(response_id = responder.id,
+                                   survey_id   = survey_id,
+                                   question_id = question.id)
+        else:
+            answer:Answer = session.query(Answer).\
+                            filter_by(response_id = responder.id,
+                                      question_id = question.id).first() \
+            or \
+            Answer(response_id = responder.id,
+                   survey_id   = survey_id,
+                   question_id = question.id)
         
     except TypeError:
         return {"status":"ERR"}
@@ -58,7 +80,8 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
     session.add(responder)
 
     # you can only answer one question at a time really, so answering
-    # a question also sets any of your other answers to not 'in progress'
+    # a question also sets any of your other answers to not 'in
+    # progress'.
     session.query(Answer).\
         filter(Answer.response_id == responder.id,
                Answer.question_id != question.id,

@@ -35,7 +35,7 @@ def dashboard_data(data: http.RequestData, session: Session) -> dict:
             "responses": get_responses(data, session),
             "summary": get_summary(session)
         }
-        mc.set(cachekey, dashdata, 100)
+        mc.set(cachekey, dashdata, 3)
         
         return dashdata
 

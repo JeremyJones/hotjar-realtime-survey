@@ -20,17 +20,43 @@ var app = {
     //
     "lastAnswers": {},
     //
-    "sendAnswer": function () { // my callback to be run on blur or keyup
-	var my_val = $(this).val(),
+    "sendAnswer": function () { // my callback to be run on input change
+	var my_val = null,
 	    my_id = null;
 
-	if ($(this).attr('type') == 'radio') { // radios don't use html id
+	if ($(this).attr('type') == 'checkbox') { // checkboxes are special
 	    my_id = $(this).attr('name');
-	} else {
-	    my_id = $(this).attr('id');
-	}
 
-	app.log("Gonnae send val " + my_val + " from type " + $(this).attr('type'));
+	    var miniPostAnswer = function (data, async=true) {
+		$.ajax({'url':'/answer',
+			'method': 'POST',
+ 			'data': data,
+			'processData': true,
+			'async': async});
+	    };
+	    
+	    miniPostAnswer({"q": my_id,
+			    "z": 'delete',
+			    "who": app.myIdentifier.eui}, false);
+
+	    $("input[type=checkbox][name=" + my_id + "]:checked").each(
+		function () {
+		    var value = $(this).attr('value');
+		    app.log("Sending val " + value);
+		    miniPostAnswer({"q": my_id,    "a": value,
+				       "who": app.myIdentifier.eui});
+		   });
+	    
+	    return;
+	}	
+	else if ($(this).attr('type') == 'radio') { // radios don't use html id
+	    my_id = $(this).attr('name');
+	    my_val= $(this).val();
+	}
+	else {
+	    my_id = $(this).attr('id');
+	    my_val= $(this).val();
+	}
 	
 	// don't send empty answers when the page is first loaded
 	if (my_val === "" && "undefined" == typeof(app.lastAnswers[my_id]))
@@ -252,15 +278,10 @@ var app = {
 	    answerHTML += '</div>';
 
 	    postRenderCallback = function () {
-		var lastAnswerKey = "answer2question" + question.id,
-		    lastAnswer = null;
+		var selector = 'input:' + question.answer_type +
+		    '[name="answer2question' + question.id + '"]';
 		
-		if ("undefined" != typeof(app.lastAnswers[lastAnswerKey])) {
-		    //lastAnswer = JSON.parse(app.lastAnswers[lastAnswerKey]['value']
-		    ;
-		}
-		$('input:radio[name="answer2question' + question.id + '"]').on("change",
-									       app.sendAnswer);
+		$(selector).on("click", app.sendAnswer);
 	    };
 	}
 	else {

@@ -80,10 +80,11 @@ var app = {
 		   
 		   _.each(app.runtime.data.questions._items,
 			  function (q) {
-			      var answer = _.find(resp.answers,
-						  function (ans) {
-						      return ans.question_id == q.id;
-						  }),
+			      var answers = _.where(resp.answers,
+						    function (ans) {
+							return ans.question_id == q.id;
+						    }),
+				  answer = answers.join(', '),
 				  tableCell = "",
 				  showDots = false;
 
@@ -150,7 +151,7 @@ var app = {
     },
 
     displaySummaryDataPoints: function () {
-	app.log("Re-drawing summary");
+	//app.log("Re-drawing summary");
 	app.fillDataConditional($("#sAnswerCount"), app.runtime.data.summary.num_responses);
 	app.fillDataConditional($("#sAnswerAge"), app.runtime.data.summary.average_age);
 	app.fillDataConditional($("#sAnswerGender"), app.runtime.data.summary.gender_ratio);
