@@ -13,6 +13,7 @@ class Question(Base):
     survey_id = Column(Integer, default=0)
     order_in_list = Column(Integer, default=1)
     required = Column()
+    allow_multiple = Column()
     question = Column(String)
     answer_type = Column(String)
     answer_options = Column(String)

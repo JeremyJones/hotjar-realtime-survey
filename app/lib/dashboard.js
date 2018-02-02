@@ -9,15 +9,9 @@ var app = {
 	data: null,
 	data_checksum: null,
 	start_time: new Date(),
+	last_data_time: null,
 	networkFail: false
     },
-    /*
-    summary: null,
-    questions: null,
-    responses: null,
-    responses_checksum: null,
-    */
-    
     //
     live_updates: function () {  // -> bool
 	if (app.runtime.networkFail) return false;
@@ -47,14 +41,17 @@ var app = {
 			    return;
 
 		    app.runtime.data = d;
+		    app.runtime.last_data_time = new Date();
 		    app.drawSummary();
 		    app.drawTable();
+
 		    app.runtime.data_checksum = d.responses._items_checksum;
 		}});
     },
 
     loopDashData: function () {
-	setInterval(function () {
+	setInterval(
+	    function () {
 		if (app.live_updates()) {
 		    app.getDashData();
 		} else {
@@ -68,35 +65,32 @@ var app = {
 	app.drawLastUpdatedText();
     },
 
-    drawTable: function () {
-	var data = new google.visualization.DataTable();
+    responses2datarows: function () { // generate the data table structure
+	var dataRows = [];
 	
-	_.each(app.runtime.data.questions._items,
-	       function (q) {
-		   data.addColumn('string', q.question);
-	       });
-
-	data.addColumn('boolean', 'Completed');
-
 	_.each(app.runtime.data.responses._items,
-	       function (r) {
-
+	       function (resp) {
 		   var responseData = [];
+		   
 		   _.each(app.runtime.data.questions._items,
 			  function (q) {
-			      var answer = _.find(r.answers,
-						  function (a) {
-						      return a.question_id == q.id;
+			      var answer = _.find(resp.answers,
+						  function (ans) {
+						      return ans.question_id == q.id;
 						  }),
 				  tableCell = "";
 
 			      if (answer) {
 
-				  tableCell = answer.answer;
+				  if (q.answer_type === 'email' && answer.in_progress != 'Y')
+				      tableCell = '&lt;<a href="mailto:' + answer.answer + '">' + answer.answer + '</a>&gt;';
+				  else
+				      tableCell = answer.answer;
 
-				  if (answer.in_progress == 'Y' && r.is_completed != 'Y') {
+				  if (answer.in_progress == 'Y' && resp.is_completed != 'Y') {
 				      tableCell += '<span style="font-size:24px" ' +
-					  'class="saving"><span>.</span><span>.</span><span>.</span></span>';
+					  'class="saving"><span>.</span><span>.</span>' +
+					  '<span>.</span></span>';
 				  }
 				  responseData.push(tableCell);
 
@@ -105,17 +99,31 @@ var app = {
 			      }
 			  });
 
-		   if (r.is_completed == 'Y') {
+		   if (resp.is_completed == 'Y') {
 		       responseData.push(true);
 		   } else {
 		       responseData.push(false);
 		   }
 		   
-		   data.addRow(responseData);
+		   dataRows.push(responseData);
 	       });
 
-	var table = new google.visualization.Table(document.getElementById('latable'));
+	return dataRows;
+    },
+    
+    drawTable: function () {
+	var data = new google.visualization.DataTable(),
+	    table = new google.visualization.Table(document.getElementById('latable'));
+
+	$("#numTableRows").text(app.runtime.data.responses._items.length);
 	
+	_.each(app.runtime.data.questions._items,
+	       function (q) {
+		   data.addColumn('string', q.question);
+	       });
+
+	data.addColumn('boolean', 'Completed');
+	data.addRows(app.responses2datarows());
 	table.draw(data, {showRowNumber: false, allowHtml: true});
     },
 
