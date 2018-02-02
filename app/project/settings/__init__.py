@@ -23,6 +23,8 @@ ENV = Env()
 SETTINGS:dict = {
     'SURVEY_ID': 0,  # implement to run multiple
     #
+    'MEMCACHED_DASHBOARD_DATA': 2,  # seconds
+    #
     'DATABASE': {
         'URL': ENV['DATABASE_URL'],
         'METADATA': Base.metadata

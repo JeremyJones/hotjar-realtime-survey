@@ -25,19 +25,25 @@ def dashboard_data(data: http.RequestData, session: Session) -> dict:
         try:
             if data['last'] == cached['responses']['_items_checksum']:
                 return {"status":304}
-        except KeyError:
+            else:
+                return cached
+        except TypeError:
             pass
-        else:
-            return cached
-    else:
-        dashdata = {
-            "questions": get_questions(session),
-            "responses": get_responses(data, session),
-            "summary": get_summary(session)
-        }
-        mc.set(cachekey, dashdata, 3)
         
-        return dashdata
+    dashdata = {
+        "questions": get_questions(session),
+        "responses": get_responses(data, session),
+        "summary": get_summary(session)
+    }
+
+    try:
+        cache_time = SETTINGS['MEMCACHED_DASHBOARD_DATA']
+    except KeyError:
+        cache_time = 1
+    finally:
+        mc.set(cachekey, dashdata, cache_time)
+        
+    return dashdata
 
 
 def get_summary(session: Session) -> dict:
