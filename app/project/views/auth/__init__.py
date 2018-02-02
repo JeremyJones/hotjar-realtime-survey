@@ -6,6 +6,8 @@ from datetime import datetime as dt
 from hashlib import sha256
 from random import SystemRandom
 
+from os import environ
+
 from werkzeug.http import parse_cookie
 from apistar.backends.sqlalchemy_backend import Session
 
@@ -31,15 +33,20 @@ def make_new_response(session: Session) -> Response:
     """
     Generate a new SHA identifier
     """
-    identifier = Response()
-    longstring = "{rand}-{time}".\
-                 format(rand=''.join([SystemRandom().choice(["abcdefghijklmnopqrstuvwxyz"])
-                                      for n in range(100)]),
-                        time=dt.now().isoformat())
+    identifier:Response = Response()
+    longstring:str = "{rand}-{time}".\
+                     format(rand=''.join([SystemRandom().choice(["abcdefghijklmnopqrstuvwxyz"])
+                                          for n in range(100)]),
+                            time=dt.now().isoformat())
     
-    identifier.end_user_id = sha256(longstring.encode('utf-8')).hexdigest()
-    identifier.last_at = identifier.started_at
-    identifier.is_completed = ''
+    identifier.end_user_id:str = sha256(longstring.encode('utf-8')).hexdigest()
+    identifier.started_at:int = int(dt.now().timestamp())
+    identifier.is_completed:str = ''
+
+    try:
+        identifier.end_user_ip:str = environ['REMOTE_ADDR']
+    except KeyError:
+        identifier.end_user_ip:str = '?'
         
     session.add(identifier)
     session.commit()

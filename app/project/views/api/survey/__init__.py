@@ -78,8 +78,19 @@ def finalise(data: http.RequestData, session: Session) -> dict:
     except TypeError:
         return {}
 
-    session.query(Response).\
-        filter(Response.end_user_id == who,
-               Response.is_completed == '').update({Response.is_completed: 'Y'})
+    responder:Response = session.query(Response).\
+                         filter(Response.end_user_id == who,
+                                Response.is_completed == '').first()
 
-    return {}
+    try:
+        responder.is_completed = 'Y'
+    except AttributeError:
+        return {}
+    else:
+        session.add(responder)
+
+        session.query(Answer).\
+            filter(Answer.response_id == responder.id,
+                   Answer.in_progress == 'Y').update({Answer.in_progress: 'N'})
+
+        return {"status":"OK"}

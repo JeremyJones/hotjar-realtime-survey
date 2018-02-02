@@ -24,6 +24,7 @@ class Response(Base):
     id = Column(Integer, primary_key=True)
     survey_id = Column(Integer, nullable=False, default=0)
     end_user_id = Column(String)
+    end_user_ip = Column(String, default="")
     started_at = Column(Integer, nullable=False)
     last_at = Column(Integer)
     is_completed = Column()
