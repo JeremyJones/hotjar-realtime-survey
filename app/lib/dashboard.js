@@ -1,3 +1,4 @@
+/*
 var newapp = angular.module("dashboard", []);
 
 newapp.config(['$interpolateProvider', function($interpolateProvider) {
@@ -17,18 +18,34 @@ newapp.controller("dashboardCtrl", function($scope) {
 });
 
 
+*/
 var app = {
 
+    realtime_refresh_delay: 2.62,    // config option
+    //
     summary: null,
     responses: null,
     responses_checksum: null,
     //
     start_time: new Date(),
-    realtime_refresh_delay: 2.62,
-    //
     networkFail: false,
-    //
+    live_updates: function () {  // -> bool
+	var time_now = new Date();
+
+	if (app.networkFail) return false;
+	
+	return time_now.valueOf() - app.start_time.valueOf() < (43200 * 1000);
+    },
+    // ---
+    
     start: function () {
+	app.getDashData();
+	app.loopDashData();
+	
+	// setTimeout(function () {
+	// 	app.loopDashData();
+	//     }, 1000 * app.realtime_refresh_delay);
+	/*
 	app.getSummary(function () {
 		app.log("Summary returned");
 		app.getResponses();
@@ -39,16 +56,34 @@ var app = {
 			    app.getSummary();
 			}}, 1000 * app.realtime_refresh_delay);
 	    });
+	*/
     },
 
-    live_updates: function () {
-	var time_now = new Date();
+    getDashData: function () {
+	$.ajax({"url": "/dashdata",
+		"method": "POST",
+		"success": function (d) {
+		    app.summary = d.summary;
+		    app.responses = d.responses._items;
+		    app.responses_checksum = d.responses._items_checksum;
 
-	if (app.networkFail) return false;
-	
-	return time_now.valueOf() - app.start_time.valueOf() < (43200 * 1000);
+		    app.drawSummary();
+		    return;
+		}});
     },
 
+    loopDashData: function () {
+	setInterval(function () {
+		if (app.live_updates()) {
+		    app.getDashData();
+		    /*
+		    app.getResponses();
+		    app.getSummary();
+		    */
+		}}, 1000 * app.realtime_refresh_delay);
+    },
+    
+    /*
     getSummary: function (cb=null) {
 	$.ajax({url: "/summary",
 		method: "POST",
@@ -66,6 +101,7 @@ var app = {
 			this.param_cb();
 		}});
     },
+    */
     
     drawSummary: function () {
 	app.log("Drawing summary");
@@ -90,6 +126,7 @@ var app = {
 	$("#sLastUpdated").html(moment(app.summary.updated_at, "X").fromNow());
     },
     
+    /*
     getResponses: function (cb=null) {
 	$.ajax({url: "/responses",
 		method: "POST",
@@ -109,6 +146,7 @@ var app = {
 			this.param_cb();
 		}});
     },
+    */
     
     /*
       Application logging function defaults to no-op, optionally overridden.

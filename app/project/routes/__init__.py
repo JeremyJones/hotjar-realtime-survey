@@ -13,7 +13,7 @@ from project.views.auth import get_identifier
 
 from project.views.api import get_questions
 from project.views.api.survey import answer_question, finalise
-from project.views.api.dashboard import get_summary, get_responses
+from project.views.api.dashboard import dashboard_data, get_summary, get_responses
 
 
 ROUTES = [
@@ -31,6 +31,8 @@ ROUTES = [
     Route('/answer', 'POST', answer_question),
     Route('/finalise', 'POST', finalise),
     #
+    Route('/dashdata', 'POST', dashboard_data),
+    # individual dashboard components calls
     Route('/summary', 'POST', get_summary),
     Route('/responses', 'POST', get_responses),
     

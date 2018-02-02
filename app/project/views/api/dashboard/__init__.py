@@ -13,6 +13,13 @@ from project.models import Response, Answer
 from project.settings import SETTINGS
 
 
+def dashboard_data(data: http.RequestData, session: Session) -> dict:
+    return {
+        "responses": get_responses(data, session),
+        "summary": get_summary(session)
+    }
+
+
 def get_summary(session: Session) -> dict:
     """
     API: Get a JSON structure of summary data, for the admin page
