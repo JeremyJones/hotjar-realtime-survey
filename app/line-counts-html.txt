@@ -1,0 +1,4 @@
+  72 ./templates/dashboard/dashboard.html
+  44 ./templates/survey/survey.html
+  61 ./templates/homepage.html
+ 177 total

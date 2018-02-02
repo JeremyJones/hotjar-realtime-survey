@@ -11,23 +11,34 @@
 
 <body ng-app="survey">
 
-  <div class="clearfix">
-  <img class="img float-right" src="/lib/hotjar-logo-wee.png"
-       alt="" title="" />
-  </div>
-  
-  <div class="display:block; min-height:100px" id="surveySays">
-    <em>Loading...</em>
+  <div class="container">
+    <div class="row">
+      <div class="col-10">
+	<br/>
+      </div>
+      <div class="col-2">
+	<img class="img img-responsive" src="/lib/hotjar-logo-wee.png"
+	     alt="" title="" />
+      </div>
+    </div>
+    <div class="row"><div class="col"><hr/></div></div>
+    <div class="row"><div class="col">
+	
+	<div class="display:block; min-height:100px" id="surveySays">
+	  <em>Loading...</em>
+	</div>
+
+    </div></div>
   </div>
 
-    <script type="text/javascript"
-	    src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
-    <script type="text/javascript" src="/lib/jq.js"></script>
-    <script type="text/javascript" src="/lib/u.js"></script>
-    <script type="text/javascript" src="/lib/bb.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script type="text/javascript"
+	  src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+  <script type="text/javascript" src="/lib/jq.js"></script>
+  <script type="text/javascript" src="/lib/u.js"></script>
+  <script type="text/javascript" src="/lib/bb.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
-    <script src="/lib/survey.js"></script>
+  <script src="/lib/survey.js"></script>
 
 </body>
 </html>
