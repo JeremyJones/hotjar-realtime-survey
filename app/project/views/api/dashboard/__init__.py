@@ -11,15 +11,33 @@ from sqlalchemy import func
 
 from project.models import Response, Answer
 from project.settings import SETTINGS
+from project.utils.caches.memcache import mc
+
 from .. import get_questions
 
 
 def dashboard_data(data: http.RequestData, session: Session) -> dict:
-    return {
-        "questions": get_questions(session),
-        "responses": get_responses(data, session),
-        "summary": get_summary(session)
-    }
+
+    cachekey = 'dashboard_data'
+    cached = mc.get(cachekey)
+
+    if cached:
+        try:
+            if data['last'] == cached['responses']['_items_checksum']:
+                return {"status":304}
+        except KeyError:
+            pass
+        else:
+            return cached
+    else:
+        dashdata = {
+            "questions": get_questions(session),
+            "responses": get_responses(data, session),
+            "summary": get_summary(session)
+        }
+        mc.set(cachekey, dashdata, 100)
+        
+        return dashdata
 
 
 def get_summary(session: Session) -> dict:

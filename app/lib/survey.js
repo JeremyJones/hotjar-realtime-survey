@@ -22,8 +22,16 @@ var app = {
     //
     "sendAnswer": function () { // my callback to be run on blur or keyup
 	var my_val = $(this).val(),
-	    my_id = $(this).attr('id');
+	    my_id = null;
 
+	if ($(this).attr('type') == 'radio') { // radios don't use html id
+	    my_id = $(this).attr('name');
+	} else {
+	    my_id = $(this).attr('id');
+	}
+
+	app.log("Gonnae send val " + my_val + " from type " + $(this).attr('type'));
+	
 	// don't send empty answers when the page is first loaded
 	if (my_val === "" && "undefined" == typeof(app.lastAnswers[my_id]))
 	    return false;
@@ -48,7 +56,8 @@ var app = {
 		'success': function (d) {
 		    if (d.status && d.status == 'OK' && this.pt_val) {
 			
-			app.lastAnswers[this.pt_id] = { 'value': this.pt_val, 'validated': false };
+			app.lastAnswers[this.pt_id] = {'value': this.pt_val,
+						       'validated': false };
 			
 			// feedback for successful answers
 			if (d.validAnswer) {
@@ -57,8 +66,8 @@ var app = {
 			    app.lastAnswers[this.pt_id]['validated'] = true;
 			}
 
-			// successful answer posting (or in progress answer)
-			// also sets the cookie:
+			// any successful answer posting (or in progress answer)
+			// also sets the cookie so you're in a current session:
 			Cookies.set('mid', app.myIdentifier, {path:''}); // struct ok
 		    }
 		}});
@@ -157,7 +166,7 @@ var app = {
 						 app.lastAnswers[lastAnswerKey]['validated']);
 				      });
 
-	return true;  // just now ###
+	return true;  // dev
 	
 	if (! allAnswersValid) {
 	    alert('Please answer all required fields.');
@@ -222,6 +231,36 @@ var app = {
 		    $("#answer2question" + question.id).val(app.lastAnswers[lastAnswerKey]['value']);
 
 		$("#answer2question" + question.id).on("change", app.sendAnswer);
+	    };
+	}
+	else if (question.answer_type == 'radio' || question.answer_type == 'checkbox') {
+	    answerHTML = '<div class="form-group">';
+
+	    _.each(JSON.parse(question.answer_options),
+		   function (o) {
+		       var tnow = new Date(),
+			   mmid = ("" + tnow.valueOf()).substring(-4) + "a2q" + question.id;
+		       
+		       answerHTML += '<div class="form-check"><input type="' +
+			   question.answer_type + '" ' +
+			   ' id="' + mmid + '" ' +
+			   ' class="form-check-input" name="answer2question' + question.id +
+			   '" value="' + o + '" /><label class="form-check-label"' +
+			   ' for="' + mmid + '">' + o + '</label></div>';
+		   });
+	    
+	    answerHTML += '</div>';
+
+	    postRenderCallback = function () {
+		var lastAnswerKey = "answer2question" + question.id,
+		    lastAnswer = null;
+		
+		if ("undefined" != typeof(app.lastAnswers[lastAnswerKey])) {
+		    //lastAnswer = JSON.parse(app.lastAnswers[lastAnswerKey]['value']
+		    ;
+		}
+		$('input:radio[name="answer2question' + question.id + '"]').on("change",
+									       app.sendAnswer);
 	    };
 	}
 	else {
