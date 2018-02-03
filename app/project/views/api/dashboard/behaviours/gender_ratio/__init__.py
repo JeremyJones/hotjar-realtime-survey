@@ -1,6 +1,6 @@
 def get_gender_ratio(session) -> dict:
     sql = 'SELECT answer, COUNT(*) FROM answers ' +\
-          'WHERE question_id = 6 ' +\
+          'WHERE question_id = %d ' % 6 +\
           'GROUP BY answer LIMIT 2'
 
     try:
@@ -18,7 +18,8 @@ def get_gender_ratio(session) -> dict:
             total += r[1]
 
         for r in rows:
-            ratios[r[0]] = '%d%%' % ((r[1]/ (total or 1)) * 100)
+            ratios[r[0]] = {'pct': '%d%%' % ((r[1]/ (total or 1)) * 100),
+                            'cnt': nums[r[0]]}
 
         return ratios
 

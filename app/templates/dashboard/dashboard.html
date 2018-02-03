@@ -43,7 +43,7 @@
       <div class="col">
 	<div class="summaryAnswer">
 	  <h5 class="text-center">Top Colours:</h5>
-	  <div id="sAnswerColors" class="text-center text-muted sAnswer"></div>
+	  <div id="sAnswerColors" class="xtext-center text-muted sAnswer"></div>
 	</div>
       </div>
     </div>
@@ -54,13 +54,14 @@
 
       <!-- detail -->
       
-      <p class="text-center">
-	Here are the latest <span id="numTableRows"></span> surveys.
+      <h5 class="text-left">
+	Latest <!--<span id="numTableRows"></span>--> Surveys:
 	<!--<a href="/full-results.csv" target="_blank">Download all surveys.</a>-->
-      </p>
-      
+      </h5>
       <div id="latable"></div>
-      <p class="text-center">Most recent survey: <span id="sLastUpdated" class="sAnswer"></span>.</p>
+      <p class="text-center text-muted">Most recent answer: <span id="sLastUpdated" class="sAnswer"></span>.<br>
+	<small>Live Updates: <a href="#" id="enableLive">Enable</a>
+	  | <a href="#" id="disableLive">Disable</a></small></p>
       
     </div></div>
     

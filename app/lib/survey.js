@@ -1,9 +1,11 @@
+/*
 var newapp = angular.module("survey", []);
 
 newapp.config(['$interpolateProvider', function($interpolateProvider) {
     $interpolateProvider.startSymbol('{ng ');
     $interpolateProvider.endSymbol(' ng}');
 }]);
+*/
 
 //
 
@@ -22,10 +24,11 @@ var app = {
     //
     "sendAnswer": function () { // my callback to be run on input change
 	var my_val = null,
-	    my_id = null;
+	    my_id = null,
+	    elem = $(this);
 
-	if ($(this).attr('type') == 'checkbox') { // checkboxes are special
-	    my_id = $(this).attr('name');
+	if (elem.attr('type') == 'checkbox') { // checkboxes are special
+	    my_id = elem.attr('name');
 
 	    var miniPostAnswer = function (data, async=true) {
 		$.ajax({'url':'/answer',
@@ -35,27 +38,26 @@ var app = {
 			'async': async});
 	    };
 	    
-	    miniPostAnswer({"q": my_id,
-			    "z": 'delete',
+	    miniPostAnswer({"q": my_id, "z": 'delete',
 			    "who": app.myIdentifier.eui}, false);
 
 	    $("input[type=checkbox][name=" + my_id + "]:checked").each(
 		function () {
 		    var value = $(this).attr('value');
 		    app.log("Sending val " + value);
-		    miniPostAnswer({"q": my_id,    "a": value,
-				       "who": app.myIdentifier.eui});
-		   });
+		    miniPostAnswer({"q": my_id, "a": value,
+				    "who": app.myIdentifier.eui});
+		});
 	    
 	    return;
 	}	
-	else if ($(this).attr('type') == 'radio') { // radios don't use html id
-	    my_id = $(this).attr('name');
-	    my_val= $(this).val();
+	else if (elem.attr('type') == 'radio') { // radios don't use html id
+	    my_id = elem.attr('name');
+	    my_val= elem.val();
 	}
 	else {
-	    my_id = $(this).attr('id');
-	    my_val= $(this).val();
+	    my_id = elem.attr('id');
+	    my_val= elem.val();
 	}
 	
 	// don't send empty answers when the page is first loaded
@@ -135,24 +137,43 @@ var app = {
 	else { // cookie-d user
 	    if ("string" == typeof(existingId))
 		existingId = JSON.parse(existingId);
-	    
+
+	    $.ajax({'url': '/getState',
+		    'method': 'POST',
+		    'success': function (state) {
+			return;
+		    }});
+			
 	    app.myIdentifier = existingId;
+
+	    // fill existing lastAnswers, if any, and go to the right
+	    // screen.
 	}
     },
 
     "drawThankyou": function (targetDiv=app.config.targetDiv) {
-	targetDiv.html("Thank you. The survey is now complete. " +
-		       '<div><a href="/" class="btn btn-primary">' +
-		       'Finish</a></div>');
-    },
+	targetDiv.html('<h5 class="text-center">Thank you. ' +
+		       ' The survey is now complete.<br/>&nbsp;</h5>' +
+		       '<div><form><a href="/" id="finishButton" ' +
+		       ' class="btn btn-primary btn-block">' +
+		       'Finish</a><br/>' + 
+		       '<input type="checkbox" name="clearC" ' + //
+		       ' /><label for="clearC"> Reset cookies</label>' + //
+		       '</form></div>');
 
+	$("#finishButton").on('click',
+			      function () {
+				  if ($('input[name="clearC"]:checked').length > 0)
+				      Cookies.remove('mid', {path:''});
+			      });
+    },
+    
     "finalise": function () {
 	$.ajax({url:'/finalise',
 		data: {"who":app.myIdentifier.eui},
-		async: false,
+		//async: false,
 		method: 'POST',
 		success: function (d) {
-		    Cookies.remove('mid', {path:''});
 		    app.drawThankyou();
 		}});
     },
@@ -230,8 +251,11 @@ var app = {
 		if ("undefined" != typeof(app.lastAnswers[lastAnswerKey]))
 		    $("#answer2question" + question.id).val(app.lastAnswers[lastAnswerKey]['value']);
 		
+		$("#answer2question" + question.id).on("change", app.sendAnswer);
+		/*
 		$("#answer2question" + question.id).on("keyup", app.sendAnswer);
 		$("#answer2question" + question.id).on("blur", app.sendAnswer);
+		*/
 	    };
 	}
 	else if (question.answer_type == 'select') {
@@ -258,6 +282,7 @@ var app = {
 		    $("#answer2question" + question.id).val(app.lastAnswers[lastAnswerKey]['value']);
 
 		$("#answer2question" + question.id).on("change", app.sendAnswer);
+		$("#answer2question" + question.id).on("blur", app.sendAnswer);
 	    };
 	}
 	else if (question.answer_type == 'radio' || question.answer_type == 'checkbox') {
@@ -270,7 +295,7 @@ var app = {
 			   mmid = "j" + tnow.valueOf() + "q" + question.id +
 			   "o" + o.replace(/[^a-zA-Z0-9]+/g, "");
 
-		       app.log("mmid is " + mmid);
+		       //app.log("mmid is " + mmid);
 
 		       theseoptions.push('<div class="form-check"><input type="' +
 					 question.answer_type + '" ' +
@@ -359,6 +384,10 @@ var app = {
 	    $(".backnext").on('click',
 			      function () {
 				  if ($(this).attr('id') == 'nextButton') {
+				      $("input").each(function () {
+					  app.sendAnswer($(this));
+				      });
+				      
 				      if (! app.canGoFwd()) return false;
 
 				      app.myIdentifier.que += app.config.questionsPerScreen;

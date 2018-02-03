@@ -12,6 +12,7 @@ var app = {
 	data: null,
 	data_checksum: null,
 	last_data_time: null,
+	paused: false,
 	networkFail: false
     },
     //
@@ -21,7 +22,7 @@ var app = {
     },
     //
     live_updates: function () {  // -> bool
-	if (app.runtime.networkFail) return false;
+	if (app.runtime.paused || app.runtime.networkFail) return false;
 	
 	var time_now = new Date();
 
@@ -157,38 +158,66 @@ var app = {
 
 	data.addColumn('boolean', 'Completed');
 	data.addRows(app.responses2datarows());
-	table.draw(data, {page: 'enable', pageSize: 8,
+	table.draw(data, {page: 'enable', pageSize: 5,
 			  width: '100%',
 			  showRowNumber: false, allowHtml: true});
-	$("table").addClass('table');
+	
+	$("table").addClass('table').on('mouseover',
+					function () {
+					    app.runtime.paused = true;
+					});
 
+	$("#enableLive").on('click', function () {
+		app.runtime.paused = false;
+		return false;
+	    });
+	$("#disableLive").on('click', function () {
+		app.runtime.paused = true;
+		return false;
+	    });
+	
+	
+	/*
 	// compensate for having to re-add this class on table page
 	// changes
 	setInterval(function () {
 	    if (! $("table").hasClass('table')) {
 		$("table").addClass('table');
 	    }}, 250);
+	*/
     },
     // --
     formatMaleFemale: function (r) {
+
 	var html = "", looper = null;
 
 	for (looper in r) {
 	    html += '<i class="fa fa-' + looper.toLowerCase() + '"></i> ' +
-		looper + ' ' + r[looper] + '<br/>'
+		looper + ': ' + r[looper]['cnt'] + '<br/>'
 	}
 	
 	return html;
     },
     // --
+    pieGraphMF: function () {
+	return;
+    },
+
+    // --
     displaySummaryDataPoints: function () {
 	//app.log("Re-drawing summary");
 	var showData = app.fillDataConditional;  // only if they've changed
 	
-	showData($("#sAnswerCount"), app.runtime.data.summary.num_responses);
-	showData($("#sAnswerAge"), (0.0 + app.runtime.data.summary.average_age).toFixed(1));
-	showData($("#sAnswerGender"), app.formatMaleFemale(app.runtime.data.summary.gender_ratio));
-	showData($("#sAnswerColors"), app.runtime.data.summary.top_3_colors.join(', '));
+	showData($("#sAnswerCount"), "" + app.runtime.data.summary.num_responses);
+	showData($("#sAnswerAge"), Math.abs((0.0 + app.runtime.data.summary.average_age).toFixed(1)));
+
+	app.pieGraphMF($("#sAnswerGender"));
+	// showData($("#sAnswerGender"), app.formatMaleFemale(app.runtime.data.summary.gender_ratio));
+
+	if (app.runtime.data.summary.top_3_colors.length) 
+	    showData($("#sAnswerColors"),
+		     '<ol><li>' + app.runtime.data.summary.top_3_colors.join('</li><li>') +
+		     '</li></ol>');
     },
     // --
     fillDataConditional: function (target, content) {
@@ -197,7 +226,11 @@ var app = {
     },
     // --
     drawLastUpdatedText: function () {
-	$("#sLastUpdated").html(moment(app.runtime.data.summary.updated_at, "X").fromNow());
+	var text = moment(app.runtime.data.summary.updated_at, "X").fromNow();
+
+	if (text == 'Invalid date') text = "No surveys yet";
+	
+	$("#sLastUpdated").html(text);
     },
   
     /*
