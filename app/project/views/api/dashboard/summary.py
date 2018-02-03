@@ -17,6 +17,6 @@ def get_summary(session) -> dict:
         "num_responses": get_surveys_count(session),
         "average_age": get_average_age(session),
         "gender_ratio": get_gender_ratio(session),
-        "top_3_colors": get_top_3_colors(session)
+        "top_3_colors": get_top_3_colors(session),
         "updated_at": get_last_answered(session)
     }
