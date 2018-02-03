@@ -2,17 +2,22 @@ var app = {
 
     config: { 
 	realtime_refresh_delay: 2.62,  // default refresh check time
-	realtime_refresh_delay: 1,     // overridden refresh time
+	realtime_refresh_delay: 1,     // override refresh time
 	number_of_hours_to_run: 0.25,  // how long to run until going into standby
-	enable_live_dots: false        // whether to try to display those dots on fields in progress
+	ft_live_dots: false   // live dots feature toggle: if true display animated dots inside live fields 
     },
     //
     runtime: {
+	start_time: new Date(),
 	data: null,
 	data_checksum: null,
-	start_time: new Date(),
 	last_data_time: null,
 	networkFail: false
+    },
+    //
+    start: function () {
+	app.getDashData();  // first time fills quick as possible
+	app.loopDashData();
     },
     //
     live_updates: function () {  // -> bool
@@ -24,12 +29,17 @@ var app = {
 	       < (1000 * 3600 * app.config.number_of_hours_to_run));
     },
     // ---
-    
-    start: function () {
-	app.getDashData();
-	app.loopDashData();
-    },
+    setData: function (data, setChecksum=true) {
+	app.runtime.data = data;
+	app.runtime.last_data_time = new Date()
 
+	if (setChecksum) app.setDataChecksum();
+    },
+    // --
+    setDataChecksum function () {
+	app.runtime.data_checksum = d.responses._items_checksum;
+    },
+    // --
     getDashData: function () {
 	$.ajax({"url": "/dashdata",
 		"data": {"last": app.runtime.data_checksum},
@@ -42,26 +52,26 @@ var app = {
 
 		    if ("undefined" != d["status"])
 			if (d.status == 304) return;
-
+		    
+		    /* client-side checksum optim. this is handled
+		     * server-side now using the 'last' param:
+		     *
 		    if (app.runtime.data_checksum)
 			if (app.runtime.data_checksum === d.responses._items_checksum)
 			    return;
-
-		    app.runtime.data = d;
-		    app.runtime.last_data_time = new Date();
-
+		    */
+		    app.setData(d, false);
 		    app.drawDashboard();
-
-		    app.runtime.data_checksum = d.responses._items_checksum; // after app.drawDashboard()
+		    app.setDataChecksum();
 		}});
     },
-
+    // --
     drawDashboard: function () {
 	app.displaySummaryDataPoints();
 	app.drawLastUpdatedText();
 	app.drawTable();
     },
-    
+    // --
     loopDashData: function () {
 	setInterval(
 	    function () {
@@ -71,7 +81,7 @@ var app = {
 		    app.drawLastUpdatedText(); // just the momentjs update
 		}}, 1000 * app.config.realtime_refresh_delay);
     },
-
+    // --
     responses2datarows: function () { // generate the data table structure
 	var dataRows = [];
 	
@@ -102,7 +112,7 @@ var app = {
 				  else
 				      tableCell = answer.answer;
 
-				  showDots = (app.config.enable_live_dots &&
+				  showDots = (app.config.ft_live_dots &&
 					      ((q.answer_type.substring(0,4) == 'text' || q.answer_type == 'email') &&
 					       answer.in_progress == 'Y' && resp.is_completed != 'Y'));
 				  
@@ -129,7 +139,7 @@ var app = {
 
 	return dataRows;
     },
-    
+    // --
     drawTable: function () {
 	var data = new google.visualization.DataTable(),
 	    table = new google.visualization.Table(document.getElementById('latable'));
@@ -155,7 +165,7 @@ var app = {
 		$("table").addClass('table');
 	    }}, 250);
     },
-
+    // --
     formatMaleFemale: function (r) {
 	var html = "", looper = null;
 
@@ -166,24 +176,26 @@ var app = {
 	
 	return html;
     },
-    
+    // --
     displaySummaryDataPoints: function () {
 	//app.log("Re-drawing summary");
-	app.fillDataConditional($("#sAnswerCount"), app.runtime.data.summary.num_responses);
-	app.fillDataConditional($("#sAnswerAge"), Math.round(app.runtime.data.summary.average_age));
-	app.fillDataConditional($("#sAnswerGender"), app.formatMaleFemale(app.runtime.data.summary.gender_ratio));
-	app.fillDataConditional($("#sAnswerColors"), app.runtime.data.summary.top_3_colors.join(', '));
+	var showData = app.fillDataConditional;  // only if they've changed
+	
+	showData($("#sAnswerCount"), app.runtime.data.summary.num_responses);
+	showData($("#sAnswerAge"), Math.round(app.runtime.data.summary.average_age));
+	showData($("#sAnswerGender"), app.formatMaleFemale(app.runtime.data.summary.gender_ratio));
+	showData($("#sAnswerColors"), app.runtime.data.summary.top_3_colors.join(', '));
     },
-
+    // --
     fillDataConditional: function (target, content) {
 	if (target.html() != content)
 	    target.html(content);
     },
-
+    // --
     drawLastUpdatedText: function () {
 	$("#sLastUpdated").html(moment(app.runtime.data.summary.updated_at, "X").fromNow());
     },
-    
+  
     /*
       Application logging function defaults to no-op, optionally overridden.
      */

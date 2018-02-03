@@ -1,72 +1,78 @@
-<html ng-app="dashboard">
-
+<html>
 <head>
-    <title>Dashboard</title>
-
-    <!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script-->
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-
     <link rel="stylesheet" href="/lib/mdashstyle.css" />
-    
-    <script src="/lib/jq.js"></script>
-    
-    <script
-       src="/lib/u.js"></script>
-    <script type="text/javascript"
-	    src="/lib/bb.js"></script>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    
-    <script type="text/javascript" src="/lib/moment-with-locales.js"></script>
-    <script type="text/javascript" src="/lib/dashboard.js"></script>
+    <title>Dashboard</title>
 </head>
 
-<body ng-controller="dashboardCtrl">
+<body ng-app="dashboard">
 
-    <div class="controllerArea">
-
-      <!--
-      <div class="controllerFilter">
-
-          <input checked="checked" disabled="true" value="includePartial" type="checkbox" name="includePartial" id="includePartialCheckbox" /><label for="includePartialCheckbox"> Include partially-completed surveys.</label>
-
-        </div>
-      -->
-
-        <div class="visualisationArea">
-	  <div class="summaryAnswer">
-	    Number of surveys:
-	    <span id="sAnswerCount" class="sAnswer"></span>
-	  </div>
-	  <div class="summaryAnswer">
-	    Average age of respondents:
-	    <span id="sAnswerAge" class="sAnswer"></span>
-	  </div>
-	  <div class="summaryAnswer">
-	    Gender Ratio:
-	    <span id="sAnswerGender" class="sAnswer"></span>
-	  </div>
-	  <div class="summaryAnswer">
-	    Top 3 Colours:
-	    <span id="sAnswerColors" class="sAnswer"></span>
-	  </div>
-        </div>
-    </div>
-
-    <hr/>
-    
-    <div class="detailArea">
-
-      <p>
-      Displaying most recent <span id="numTableRows"></span> survey results.
-      Last updated <span id="sLastUpdated" class="sAnswer"></span>.
-      </p>
-
-      <div id="latable">
+  <div class="container">
+    <div class="row">
+      <div class="col-10">
+	<br/>
       </div>
-	  
+      <div class="col-2">
+	<img class="img img-responsive" src="/lib/hotjar-logo-wee.png"
+	     alt="" title="" />
+      </div>
     </div>
+    <div class="row"><div class="col"><hr/></div></div>
+    <div class="row"><div class="col">
 
+	<!-- page -->
+
+	<div class="controllerArea">
+
+          <div class="visualisationArea">
+	    <div class="summaryAnswer">
+	      Surveys:
+	      <span id="sAnswerCount" class="sAnswer"></span>
+	    </div>
+	    <div class="summaryAnswer">
+	      Average Age:
+	      <span id="sAnswerAge" class="sAnswer"></span>
+	    </div>
+	    <div class="summaryAnswer">
+	      Gender Ratio:
+	      <span id="sAnswerGender" class="sAnswer"></span>
+	    </div>
+	    <div class="summaryAnswer">
+	      Top Colours:
+	      <span id="sAnswerColors" class="sAnswer"></span>
+	    </div>
+          </div>
+	</div>
+
+	<hr/>
+	
+	<div class="detailArea">
+
+	  <p>
+	    Displaying most recent <span id="numTableRows"></span> survey results.
+	    <a href="/full-results.csv" target="_blank">Download all results.</a>
+	  </p>
+
+	  <div id="latable">
+	  </div>
+	  
+	  <p>Last updated <span id="sLastUpdated" class="sAnswer"></span>.</p>
+	</div>
+
+	<!-- /page -->
+
+    </div></div>
+  </div>
+
+  <!--script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script-->
+  
+  <script src="/lib/jq.js"></script>
+  <script src="/lib/u.js"></script>
+  <!--script type="text/javascript" src="/lib/bb.js"></script-->
+  
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="/lib/moment-with-locales.js"></script>
+  <script type="text/javascript" src="/lib/dashboard.js"></script>
 </body>
 </html>
