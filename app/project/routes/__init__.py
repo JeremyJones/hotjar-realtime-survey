@@ -6,14 +6,16 @@ from apistar import Route, Include
 from apistar.handlers import docs_urls
 from apistar.handlers import serve_static
 
-from project.views.html import survey, dashboard
+from project.views.html import survey
+from project.views.html import dashboard
 from project.views.html import homepage
 
 from project.views.auth import get_identifier
 
 from project.views.api import get_questions
-from project.views.api.survey import answer_question, finalise
-from project.views.api.dashboard import dashboard_data, get_summary, get_responses
+from project.views.api.survey.answer import answer_question
+from project.views.api.survey.finalise import finalise
+from project.views.api.dashboard import dashboard_data
 
 
 ROUTES = [
@@ -21,7 +23,7 @@ ROUTES = [
     # HTML pages & static URLs
     Route('/dashboard', 'GET', dashboard),  # admin page
     Route('/survey', 'GET', survey),  # survey page
-    Route('/lib/{path}', 'GET', serve_static),  # static css & js
+    Route('/lib/{path}', 'GET', serve_static),  # static files
     Route('/', 'GET', homepage), # solution homepage (list of links)
 
     # API URLs
@@ -32,9 +34,6 @@ ROUTES = [
     Route('/finalise', 'POST', finalise),
     #
     Route('/dashdata', 'POST', dashboard_data),
-    # individual dashboard components calls
-    Route('/summary', 'POST', get_summary),
-    Route('/responses', 'POST', get_responses),
     
     # Others
     Include('/docs', docs_urls)  # built-in admin ui

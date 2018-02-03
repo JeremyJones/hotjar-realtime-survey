@@ -10,17 +10,24 @@
     7 ./project/utils/caches/redis/__init__.py
     5 ./project/utils/caches/memcache/__init__.py
     8 ./project/utils/caches/__init__.py
+   48 ./project/views/api/dashboard/responses.py
    15 ./project/views/api/dashboard/behaviours/top_3_colors/__init__.py
+    1 ./project/views/api/dashboard/behaviours/__init__.py
     6 ./project/views/api/dashboard/behaviours/average_age/__init__.py
+    8 ./project/views/api/dashboard/behaviours/surveys_count/__init__.py
    27 ./project/views/api/dashboard/behaviours/gender_ratio/__init__.py
-  128 ./project/views/api/dashboard/__init__.py
-  119 ./project/views/api/survey/__init__.py
+   10 ./project/views/api/dashboard/behaviours/last_answered/__init__.py
+   52 ./project/views/api/dashboard/__init__.py
+   22 ./project/views/api/dashboard/summary.py
+   34 ./project/views/api/survey/finalise.py
+    4 ./project/views/api/survey/__init__.py
+   88 ./project/views/api/survey/answer.py
    21 ./project/views/api/__init__.py
    33 ./project/views/html/__init__.py
    89 ./project/views/auth/__init__.py
     1 ./project/views/__init__.py
-   41 ./project/routes/__init__.py
+   40 ./project/routes/__init__.py
     0 ./project/__init__.py
    13 ./flaskapp.py
    29 ./app.py
-  776 total
+  795 total

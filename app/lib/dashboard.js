@@ -36,7 +36,7 @@ var app = {
 	if (setChecksum) app.setDataChecksum();
     },
     // --
-    setDataChecksum function () {
+    setDataChecksum: function () {
 	app.runtime.data_checksum = d.responses._items_checksum;
     },
     // --
@@ -53,13 +53,6 @@ var app = {
 		    if ("undefined" != d["status"])
 			if (d.status == 304) return;
 		    
-		    /* client-side checksum optim. this is handled
-		     * server-side now using the 'last' param:
-		     *
-		    if (app.runtime.data_checksum)
-			if (app.runtime.data_checksum === d.responses._items_checksum)
-			    return;
-		    */
 		    app.setData(d, false);
 		    app.drawDashboard();
 		    app.setDataChecksum();
@@ -148,7 +141,9 @@ var app = {
 	
 	_.each(app.runtime.data.questions._items,
 	       function (q) {
-		   data.addColumn('string', q.question);
+		   var columnHeader = q.question;
+		   if (q.required == 'y') columnHeader += '<i class="fa fa-asterisk" title="Required"></i>*';
+		   data.addColumn('string', columnHeader);
 	       });
 
 	data.addColumn('boolean', 'Completed');
@@ -182,7 +177,7 @@ var app = {
 	var showData = app.fillDataConditional;  // only if they've changed
 	
 	showData($("#sAnswerCount"), app.runtime.data.summary.num_responses);
-	showData($("#sAnswerAge"), Math.round(app.runtime.data.summary.average_age));
+	showData($("#sAnswerAge"), (0.0 + app.runtime.data.summary.average_age).toFixed(1));
 	showData($("#sAnswerGender"), app.formatMaleFemale(app.runtime.data.summary.gender_ratio));
 	showData($("#sAnswerColors"), app.runtime.data.summary.top_3_colors.join(', '));
     },

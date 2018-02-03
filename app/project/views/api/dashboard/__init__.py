@@ -1,32 +1,24 @@
 """
 """
 
-from datetime import datetime as dt
-from hashlib import sha256
-from json import dumps
-
 from apistar import http
 from apistar.backends.sqlalchemy_backend import Session
-from sqlalchemy import func
 
-from project.models import Response, Answer
 from project.settings import SETTINGS
 from project.utils.caches.memcache import mc
 
+# dashboard data - 3 components
+from .summary import get_summary
+from .responses import get_responses
 from .. import get_questions
-
-# encapsulated behaviours
-from .behaviours.average_age import get_average_age
-from .behaviours.gender_ratio import get_gender_ratio
-from .behaviours.top_3_colors import get_top_3_colors
 
 
 def dashboard_data(data: http.RequestData, session: Session) -> dict:
     """
     API: Single call for a structure of data for the dashboard.
     """
-
-    cachekey:str = 'dashboard_data'
+    cachekey:str = 'dashboard_data_{survey}'.\
+                   format(survey=SETTINGS['SURVEY_ID'])
     cached = mc.get(cachekey)
 
     if cached:
@@ -51,78 +43,10 @@ def dashboard_data(data: http.RequestData, session: Session) -> dict:
     finally:
         mc.set(cachekey, dashdata, cache_time)
 
-    if 'last' in data and data['last'] == dashdata['responses']['_items_checksum']:
-        return {"status":304,"recached":True}
+    try:
+        if data['last'] == dashdata['responses']['_items_checksum']:
+            return {"status":304,"recached":True}
+    except TypeError:
+        pass
         
     return dashdata
-
-
-def get_summary(session: Session) -> dict:
-    """
-    API: Get a JSON structure of summary data, for the admin page
-    """
-
-    try:  # https://stackoverflow.com/questions/14754994/why-is-sqlalchemy-count-much-slower-than-the-raw-query
-        num_responses:int = session.query(func.count(func.distinct(Answer.response_id))).first()[0]
-    except Exception:
-        num_responses:int = 0
-
-    average_age:float = get_average_age(session)
-    gender_ratio:dict = get_gender_ratio(session)
-    top_3_colors:list = get_top_3_colors(session)
-
-    try:
-        last_updated:int = session.query(Answer).filter_by(survey_id = 0).\
-                           order_by(Answer.answered_at.desc()).limit(1).\
-                           first().answered_at
-    except TypeError:
-        last_updated:int = dt.now().timestamp()
-
-    return {"updated_at": last_updated,
-            "average_age": average_age,
-            "top_3_colors": top_3_colors,
-            "gender_ratio": gender_ratio,
-            "num_responses": num_responses}
-
-
-def get_responses(data: http.RequestData, session: Session) -> dict:
-    """
-    API: Return the most recent non-empty responses, for the admin page.
-    """
-    items:list = [{"id": r.id, "started_at": r.started_at,
-                   "is_completed": r.is_completed,
-                   "answers": [{"question_id": a.question_id,
-                                "in_progress": a.in_progress,
-                                "answer": a.answer}
-                               for a in session.query(Answer).\
-                               filter_by(response_id = r.id).\
-                               all()]}
-                  for r in session.query(Response).\
-                  order_by(Response.started_at.desc()).\
-                  limit(1000).all()]
-    
-    if 'SHOW_EMPTY_SURVEYS' in SETTINGS and \
-       SETTINGS['SHOW_EMPTY_SURVEYS']:
-        pass
-    else:
-        items:list = list(filter(lambda surv: len(surv['answers']) > 0,
-                                 items))
-
-    checksum:str = sha256(dumps(items).encode('utf-8')).hexdigest()
-
-    try:
-        if data['checksum'] == checksum:
-            return {}
-    except(KeyError, TypeError):
-        pass
-
-    # add a count of all of them
-    try:
-        surveys_count:int = int(session.\
-                                execute('SELECT COUNT(DISTINCT(response_id)) ' + \
-                                        'FROM answers WHERE survey_id = %d ' %
-                                        SETTINGS['SURVEY_ID']).first()[0])
-    except Exception:
-        surveys_count:int = 0
-    
-    return {"_items": items, "_items_checksum": checksum, "count": surveys_count}

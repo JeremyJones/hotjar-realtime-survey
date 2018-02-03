@@ -337,7 +337,7 @@ var app = {
 	'<li id=liback class="page-item"><a class="page-link backnext" id="backButton" ' +
 	' href="#" tabindex="-1"><i class="fa fa-arrow-left"></i> Previous</a> ' + 
 	    '</li>' +
-	    '<li class="page-item"><a class="page-link bnstep" href="#" disabled="true" ' +
+	    '<li class="page-item"><a class="page-link bnstep" xhref="#" disabled="true" ' +
 	    ' tabindex="-1" style="text-decoration:none" ' +
 	    ' onclick="return false"><font color="#333">Step ' +
 	    app.current_screen + ' of ' +
