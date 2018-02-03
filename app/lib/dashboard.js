@@ -37,7 +37,8 @@ var app = {
     },
     // --
     setDataChecksum: function () {
-	app.runtime.data_checksum = d.responses._items_checksum;
+	app.runtime.data_checksum =
+	    app.runtime.data.responses._items_checksum;
     },
     // --
     getDashData: function () {
@@ -84,7 +85,7 @@ var app = {
 		   
 		   _.each(app.runtime.data.questions._items,
 			  function (q) {
-			      var answers = _.where(resp.answers,
+			      var answers = _.filter(resp.answers,
 						    function (ans) {
 							return ans.question_id == q.id;
 						    }),
@@ -93,17 +94,25 @@ var app = {
 						      return ans.question_id == q.id;
 						  }),
 				  tableCell = "",
-				  showDots = false;
+				  showDots = false,
+				  answerLabel = "", c, labels = [];
 
 			      //app.log("a are " + answers);
+
+			      if (answers && answers.length > 1) {
+				  for (c in answers) { labels.push(answers[c].answer) }
+				  answerLabel = labels.join(', ');
+			      } else if (answer) {
+				  answerLabel = answer.answer;
+			      }
 			      
 			      if (answer) {
 
 				  if (q.answer_type === 'email' && answer.in_progress != 'Y')
 				      tableCell = '&lt;<a class="text-muted" href="mailto:' +
-				      answer.answer + '">' + answer.answer + '</a>&gt;';
+				      answer.answer + '">' + answerLabel + '</a>&gt;';
 				  else
-				      tableCell = answer.answer;
+				      tableCell = answerLabel;
 
 				  showDots = (app.config.ft_live_dots &&
 					      ((q.answer_type.substring(0,4) == 'text' || q.answer_type == 'email') &&

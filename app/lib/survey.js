@@ -87,8 +87,8 @@ var app = {
 			
 			// feedback for successful answers
 			if (d.validAnswer) {
-			    var target = "#tick4" + this.pt_id;
-			    $('i.fa', target).addClass('fa-check');
+			    /*var target = "#tick4" + this.pt_id;
+			      $('i.fa', target).addClass('fa-check');*/
 			    app.lastAnswers[this.pt_id]['validated'] = true;
 			}
 
@@ -184,18 +184,19 @@ var app = {
     },
 
     "canGoFwd": function () {  // we can go forward if all the 'required' questions on the screen are valid
-	var allAnswersValid = _.every(app.getCurrentQuestions(),
-				      function (q) {
-					  var lastAnswerKey = "answer2question" + q.id;
-					  return(("undefined" != typeof(app.lastAnswers[lastAnswerKey]))
-						 &&
-						 app.lastAnswers[lastAnswerKey]['validated']);
-				      });
-
-	return true;  // dev
+	var unansweredQuestion = _.find(app.getCurrentQuestions(),
+					function (q) {
+					    var lastAnswerKey = "answer2question" + q.id;
+					    return((q.required == 'y') &&
+						   ("undefined" == typeof(app.lastAnswers[lastAnswerKey])
+						    || ! app.lastAnswers[lastAnswerKey]['validated']));
+					});
 	
-	if (! allAnswersValid) {
-	    alert('Please answer all required fields.');
+	// return true;  // dev
+
+	if (unansweredQuestion) {
+	    alert('Please answer: ' + unansweredQuestion.question);
+	    $("#answer2question" + unansweredQuestion.id).focus();
 	    return false;
 	} else {
 	    return true;
@@ -266,7 +267,10 @@ var app = {
 	    _.each(JSON.parse(question.answer_options),
 		   function (o) {
 		       var tnow = new Date(),
-			   mmid = ("" + tnow.valueOf()).substring(-4) + "a2q" + question.id;
+			   mmid = "j" + tnow.valueOf() + "q" + question.id +
+			   "o" + o.replace(/[^a-zA-Z0-9]+/g, "");
+
+		       app.log("mmid is " + mmid);
 
 		       theseoptions.push('<div class="form-check"><input type="' +
 					 question.answer_type + '" ' +
@@ -286,7 +290,6 @@ var app = {
 		    '</td><td>' + theseoptions.slice(sliceat+1,theseoptions.length).join("\n") +
 		    '</td></tr></table>';
 	    }
-	    
 	    answerHTML += '</div>';
 
 	    postRenderCallback = function () {
@@ -296,9 +299,11 @@ var app = {
 		$(selector).on("click", app.sendAnswer);
 	    };
 	}
+	/*
 	else {
 	    answerHTML = '[' + question.answer_type + ' unimplemented]';
 	}
+	*/
 	
 	html = '<div xstyle="border-width:1px; border-style:solid; border-color:black" class="row input-group"><div class="col">' +
 	    '<label for="answer2question' + question.id + '" >' +

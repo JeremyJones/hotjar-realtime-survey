@@ -1,3 +1,4 @@
+from re import match
 
 from project.models import Question, Answer
 
@@ -17,7 +18,8 @@ def validate_answer(question: Question, answer: Answer) -> bool:
         return valid_string(answer.answer)
 
     elif question.answer_type == 'email':
-        return valid_email(answer.answer)
+        return valid_email(answer.answer) and match(r'^\S+@\S+\.\S\S+$',
+                                                    answer.answer)
     
     elif question.answer_type in ['select','radio']:
         return valid_select(answer.answer, question.answer_options)

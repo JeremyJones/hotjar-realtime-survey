@@ -1,8 +1,8 @@
 def get_top_3_colors(session) -> list:
     try:
-        sql:str = 'SELECT answer, COUNT(*) AS most_popular ' +\
+        sql:str = 'SELECT answer, COUNT(*) AS favourited ' +\
                   'FROM answers WHERE question_id = 8 ' +\
-                  'GROUP BY answer ORDER BY most_popular DESC LIMIT 3'
+                  'GROUP BY answer ORDER BY favourited DESC LIMIT 3'
 
         top3 = session.execute(sql)
 

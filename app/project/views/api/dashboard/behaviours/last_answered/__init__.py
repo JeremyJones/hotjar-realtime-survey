@@ -1,10 +1,11 @@
-from datetime import datetime
+from sqlalchemy import func
 from project.models import Answer
+from project.settings import SETTINGS
 
 def get_last_answered(session) -> int:
     try:
-        return session.query(Answer).filter_by(survey_id = 0).\
-            order_by(Answer.answered_at.desc()).limit(1).\
-            first().answered_at
+        return session.query(func.max(Answer.answered_at)).\
+            filter_by(survey_id = SETTINGS['SURVEY_ID']).\
+            first()[0]
     except TypeError:
-        return datetime.now().timestamp()
+        return 0
