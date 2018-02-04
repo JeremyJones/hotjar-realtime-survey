@@ -18,7 +18,7 @@ def validate_answer(question: Question, answer: Answer) -> bool:
         return valid_string(answer.answer)
 
     elif question.answer_type == 'email':
-        return valid_email(answer.answer) and match(r'^\S+@\S+\.\S\S+$',
+        return valid_email(answer.answer) and match(r'^\S+@\S+\.\S+$',
                                                     answer.answer)
     
     elif question.answer_type in ['select','radio']:

@@ -24,12 +24,10 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
         survey_id:int = 0
 
     question:Question = session.query(Question).get(question_id)
-
     responder:Response = session.query(Response).\
                          filter(Response.end_user_id == who,
                                 Response.survey_id == survey_id).\
                                 first()
-
     
     if 'z' in data and data['z'] == 'delete':  # clear stored answers (e.g. for checkboxes)
         answers = session.query(Answer).\
@@ -38,7 +36,6 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
 
         answers.delete(synchronize_session='fetch')
         return {}
-    
     
     try:
         answer_val:str = data['a']
@@ -69,6 +66,8 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
     answer.answer = answer_val
     answer.in_progress = 'Y'
     answer.valid_answer = 'Y' if validate_answer(question, answer) else 'N'
+
+    # add the new answer
     session.add(answer)
 
     responder.last_at = int(dt.now().timestamp())

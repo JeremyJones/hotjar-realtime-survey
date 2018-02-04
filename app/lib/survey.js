@@ -1,14 +1,3 @@
-/*
-var newapp = angular.module("survey", []);
-
-newapp.config(['$interpolateProvider', function($interpolateProvider) {
-    $interpolateProvider.startSymbol('{ng ');
-    $interpolateProvider.endSymbol(' ng}');
-}]);
-*/
-
-//
-
 var app = {
 
     "config": {"questionsPerScreen": 2,
@@ -83,6 +72,13 @@ var app = {
 		'pt_val': my_val,
 		//
 		'success': function (d) {
+		    // check for page resetting
+		    if (d.status && d.status == 'RESET' && d.to) {
+			Cookies.remove('mid', {path:''});
+			Cookies.set('mid', {"eui":d.to, "que": 1}, {path:''});
+			return app.start();
+		    }
+		    
 		    if (d.status && d.status == 'OK' && this.pt_val) {
 			
 			app.lastAnswers[this.pt_id] = {'value': this.pt_val,
@@ -101,7 +97,22 @@ var app = {
 		    }
 		}});
     },
+    "prefillLast": function(prefill) {
+	var counter, label;
 
+	for (counter = 0; counter < prefill.length; ++counter) {
+	    label = "answer2question" + prefill[counter]['question_id'];
+	    app.lastAnswers[label] = {"value": prefill[counter]['answer'],
+				      "validated": (prefill[counter]['valid_answer'] == 'Y')};
+	}
+	// set que to most recent question and reset
+	app.myIdentifier["que"] = prefill.length;
+	if (app.myIdentifier["que"] % 2 == 0)
+	    app.myIdentifier["que"]++;
+
+	//app.log("my id is " + app.myIdentifier.que);
+	app.drawScreen();
+    },
     "getQuestions": function() {
         $.ajax({
             'url': '/questions',
@@ -140,32 +151,51 @@ var app = {
 	    if ("string" == typeof(existingId))
 		existingId = JSON.parse(existingId);
 	    
+	    app.myIdentifier = existingId;
+
 	    $.ajax({'url': '/getState',
 			'method': 'POST',
 			'data': {'i': existingId.eui},
-		    'success': function (state) {
+			'success':
+		    function (state) {
 			if ("undefined" != typeof(state['complete']))
 			    if (state['complete']) {
 				app._completed = true;
-				return app.drawThankyou();
+				return app.alreadySubmitted();
 			    }
+			if ("undefined" != typeof(state['answers'])) {
+			    app.questions = state['questions']['_items'];
+			    app.prefillLast(state['answers']);
+			}
 		    }});
-			
-	    app.myIdentifier = existingId;
-
-	    // fill existing lastAnswers, if any, and go to the right
-	    // screen.
 	}
     },
 
+    "alreadySubmitted": function (targetDiv=app.config.targetDiv) {
+	targetDiv.html('<h5 class="text-center">Thank you. ' +
+		       ' Your survey has already been submitted.<br/>&nbsp;</h5>' +
+		       '<div><form><a href="/" id="finishButton" ' +
+		       ' class="btn btn-secondary btn-block">' +
+		       'Continue</a><br/>' + 
+		       '<input type="checkbox" id="cC1" name="clearC" ' + //
+		       ' /> <label for="cC1"> Reset cookies</label>' + //
+		       '</form></div>');
+
+	$("#finishButton").on('click',
+			      function () {
+				  if ($('input[name="clearC"]:checked').length > 0)
+				      Cookies.remove('mid', {path:''});
+			      });
+    },
+    
     "drawThankyou": function (targetDiv=app.config.targetDiv) {
 	targetDiv.html('<h5 class="text-center">Thank you. ' +
 		       ' The survey is now complete.<br/>&nbsp;</h5>' +
 		       '<div><form><a href="/" id="finishButton" ' +
-		       ' class="btn btn-primary btn-block">' +
+		       ' class="btn btn-secondary btn-block">' +
 		       'Finish</a><br/>' + 
-		       '<input type="checkbox" name="clearC" ' + //
-		       ' /><label for="clearC"> Reset cookies</label>' + //
+		       '<input type="checkbox" id="cC1" name="clearC" ' + //
+		       ' /> <label for="cC1"> Reset cookies</label>' + //
 		       '</form></div>');
 
 	$("#finishButton").on('click',
@@ -181,6 +211,7 @@ var app = {
 		//async: false,
 		method: 'POST',
 		success: function (d) {
+		    app._completed = true;
 		    app.drawThankyou();
 		}});
     },
@@ -261,6 +292,7 @@ var app = {
 		    $("#answer2question" + question.id).val(app.lastAnswers[lastAnswerKey]['value']);
 		
 		$("#answer2question" + question.id).on("change", app.sendAnswer);
+		$("#answer2question" + question.id).on("keyup", app.sendAnswer);
 		/*
 		$("#answer2question" + question.id).on("keyup", app.sendAnswer);
 		$("#answer2question" + question.id).on("blur", app.sendAnswer);
@@ -437,7 +469,7 @@ var app = {
 	return; // default
     },
 
-    "log": function (msg) {
+    "xlog": function (msg) {
 	console.log(msg);
     },
 

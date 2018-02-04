@@ -3,6 +3,8 @@ from json import dumps
 
 from project.models import Response, Answer
 from project.settings import SETTINGS
+from project.models.dashboard.summary import Summariser
+
 
 def get_responses(data, session) -> dict:
     """
@@ -18,7 +20,7 @@ def get_responses(data, session) -> dict:
                                all()]}
                   for r in session.query(Response).\
                   order_by(Response.started_at.desc()).\
-                  limit(100).all()]
+                  limit(SETTINGS['DASHBOARD_RESPONSES_LIMIT']).all()]
     
     if 'SHOW_EMPTY_SURVEYS' in SETTINGS and \
        SETTINGS['SHOW_EMPTY_SURVEYS']:
@@ -35,14 +37,8 @@ def get_responses(data, session) -> dict:
     except(TypeError, KeyError):
         pass
 
-    # add a count of all of them
-    try:
-        surveys_count:int = int(session.\
-                                execute('SELECT COUNT(DISTINCT(response_id)) ' + \
-                                        'FROM answers WHERE survey_id = %d ' %
-                                        SETTINGS['SURVEY_ID']).first()[0])
-    except Exception:
-        surveys_count:int = 0
+    s = Summariser()
+    surveys_count:int = s.countSurveys(session)
     
     return {"_items": items, "_items_count": len(items),
             "_items_checksum": checksum, "count": surveys_count}

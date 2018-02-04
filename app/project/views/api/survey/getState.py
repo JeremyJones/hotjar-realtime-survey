@@ -1,6 +1,7 @@
 from apistar import http
 from apistar.backends.sqlalchemy_backend import Session
 from project.models import Response, Answer
+from project.views.api import get_questions
 
 def get_state(data: http.RequestData, session: Session) -> dict:
     """For a returning user with id string in param 'i', return a JSON
@@ -12,7 +13,10 @@ def get_state(data: http.RequestData, session: Session) -> dict:
                              first()
     except(TypeError, KeyError):
         return {}
-           
+
+    if not responder:
+        return {}
+    
     if responder.is_completed == 'Y':
         return {"complete":True}
     else:
@@ -24,5 +28,5 @@ def get_state(data: http.RequestData, session: Session) -> dict:
                              "answer": a.answer,
                              "in_progress": a.in_progress,
                              "valid_answer": a.valid_answer}
-                            for a in answers]
-        }
+                            for a in answers],
+                "questions": get_questions(session)}

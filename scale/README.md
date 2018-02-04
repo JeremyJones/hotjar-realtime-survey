@@ -31,6 +31,7 @@ Scaling: General
 1. Javascript poll time/control can be altered.
 1. Memcache cache time can be increased.
 1. Implementation of permission tokens (e.g. load-based).
+1. Summary area backend (/dashdata optimisations)
 
 #### Survey
 
@@ -48,6 +49,7 @@ Scaling: Infrastructure & Framework
 1. Async upgrade, sending & receiving data on-the-fly.
 
 
+
 Scaling: MySQL Database
 -----------------------
 
@@ -59,3 +61,9 @@ Scaling: MySQL Database
 1. Views (native or bespoke)
 1. Master/Slave (master for surveys; slaves for dashboards)
 1. Clustering
+
+
+#### Disk usage
+
+The disk space requirements for the database are up to 5mb per 1,000
+completed surveys.

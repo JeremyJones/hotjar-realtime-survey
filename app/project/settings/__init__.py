@@ -23,7 +23,8 @@ ENV = Env()
 SETTINGS:dict = {
     'SURVEY_ID': 0,  # implement to run multiple
     #
-    'MEMCACHED_DASHBOARD_DATA': 2,  # seconds
+    'MEMCACHED_DASHBOARD_DATA': 1,  # seconds
+    'DASHBOARD_RESPONSES_LIMIT': 50,  # how many records, most recent
     #
     'DATABASE': {
         'URL': ENV['DATABASE_URL'],

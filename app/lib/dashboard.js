@@ -1,8 +1,8 @@
 var app = {
 
     config: { 
-	realtime_refresh_delay: 2.62,  // default refresh check time
-	realtime_refresh_delay: 1,     // override refresh time
+	realtime_refresh_delay: 2.99,  // default refresh check time
+	//realtime_refresh_delay: 1,     // override refresh time
 	number_of_hours_to_run: 0.25,  // how long to run until going into standby
 	ft_live_dots: false   // live dots feature toggle: if true display animated dots inside live fields 
     },
@@ -17,6 +17,7 @@ var app = {
     },
     //
     start: function () {
+	$("#latable").html('<em>Loading...</em>');
 	app.getDashData();  // first time fills quick as possible
 	app.loopDashData();
     },
@@ -67,14 +68,25 @@ var app = {
 	app.drawTable();
     },
     // --
+    polling: false,
+    conditionalPoll: function (cb) {
+	if (app.polling) return;
+	else {
+	    app.polling = true;
+	    cb();
+	    app.polling = false;
+	}
+    },
     loopDashData: function () {
 	setInterval(
 	    function () {
-		if (app.live_updates()) {
-		    app.getDashData();
-		} else {
-		    app.drawLastUpdatedText(); // just the momentjs update
-		}}, 1000 * app.config.realtime_refresh_delay);
+		app.conditionalPoll(function () {
+			if (app.live_updates()) {
+			    app.getDashData();
+			} else {
+			    app.drawLastUpdatedText(); // just the momentjs update
+			}});
+	    }, 1000 * app.config.realtime_refresh_delay);
     },
     // --
     responses2datarows: function () { // generate the data table structure
@@ -220,10 +232,14 @@ var app = {
     displaySummaryDataPoints: function () {
 	//app.log("Re-drawing summary");
 	var showData = app.fillDataConditional,  // only if they've changed
-	displayCount = "" + app.runtime.data.summary.num_responses;
+	displayCount = "" + app.runtime.data.summary.num_responses.toLocaleString();
 
-	if (app.runtime.data.summary.num_responses >= 10000)
-	    displayCount = "" + parseInt(app.runtime.data.summary.num_responses / 1000) + "k";
+	if (app.runtime.data.summary.num_responses >= 10000) {
+	    displayCount = '<span title="' +
+		app.runtime.data.summary.num_responses.toLocaleString() + '">' +
+		parseInt(app.runtime.data.summary.num_responses / 1000) + "k" +
+		'</span>';
+	}
 	
 	showData($("#sAnswerCount"), displayCount);
 	showData($("#sAnswerAge"), Math.abs((0.0 + app.runtime.data.summary.average_age).toFixed(1)));
