@@ -28,6 +28,9 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
                          filter(Response.end_user_id == who,
                                 Response.survey_id == survey_id).\
                                 first()
+
+    if not responder:
+        return {"status":"ERR"}
     
     if 'z' in data and data['z'] == 'delete':  # clear stored answers (e.g. for checkboxes)
         answers = session.query(Answer).\

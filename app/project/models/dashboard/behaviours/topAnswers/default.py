@@ -25,7 +25,8 @@ class topAnswersBehaviour():
             favs:list = []
             
             for t in tops:
-                favs.append(t[0])
+                favs.append("{answer} ({count:,})".format(answer=t[0],
+                                                          count=t[1]))
 
             return favs
         except Exception:

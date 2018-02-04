@@ -2,7 +2,7 @@ var app = {
 
     config: { 
 	realtime_refresh_delay: 2.99,  // default refresh check time
-	//realtime_refresh_delay: 1,     // override refresh time
+	realtime_refresh_delay: 0.5,   // override refresh time
 	number_of_hours_to_run: 0.25,  // how long to run until going into standby
 	ft_live_dots: false   // live dots feature toggle: if true display animated dots inside live fields 
     },
@@ -20,6 +20,7 @@ var app = {
 	$("#latable").html('<em>Loading...</em>');
 	app.getDashData();  // first time fills quick as possible
 	app.loopDashData();
+	app.unpauseLiveUpdates();
     },
     //
     live_updates: function () {  // -> bool
@@ -174,24 +175,15 @@ var app = {
 			  width: '100%',
 			  showRowNumber: false, allowHtml: true});
 	
+	/*
 	$("table").addClass('table').on('mouseover',
 					function () {
 					    app.runtime.paused = true;
 					});
+	*/
 
-	$("#enableLive").on('click', function () {
-		app.runtime.paused = false;
-		$("#enableLive").attr('disabled',true);
-		$("#disableLive").attr('disabled',false);
-		return false;
-	    });
-	$("#disableLive").on('click', function () {
-		app.runtime.paused = true;
-		$("#enableLive").attr('disabled',false);
-		$("#disableLive").attr('disabled',true);
-		return false;
-	    });
-	
+	$("#enableLive").on('click', app.unpauseLiveUpdates);
+	$("#disableLive").on('click', app.pauseLiveUpdates);
 	
 	/*
 	// compensate for having to re-add this class on table page
@@ -202,6 +194,18 @@ var app = {
 	    }}, 250);
 	*/
     },
+    // --
+    pauseLiveUpdates: function () {
+	app.runtime.paused = true;
+	$("#liveUStatus").text("OFF");
+	return false;
+    },
+    unpauseLiveUpdates: function () {
+	app.runtime.paused = false;
+	$("#liveUStatus").text("ON");
+	return false;
+    },
+    // --
     // --
     formatMaleFemale: function (r) {
 	return "";
