@@ -23,8 +23,8 @@ Scaling: General
 #### Network traffic
 
 1. Libraries combined, minified, optimised.
-1. Paths shortened.
 1. CDN directives on HTML pages.
+1. Paths shortened.
 
 #### Dashboard
 
