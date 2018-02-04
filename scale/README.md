@@ -17,22 +17,27 @@ Scaling: General
 
 Accumulation of a number of incremental gains.
 
-Network traffic:
-  Libraries combined, minified, optimised.
+#### Network traffic
 
-Dashboard:
-  Javascript poll time/control can be altered.
-  Memcache cache time can be increased.
-  Implementation of permission tokens (e.g. load-based).
+Libraries combined, minified, optimised.
 
-Survey:
-  Automatic answer-sending can be altered to e.g. onblur only, instead
-  of also onchange.
-  Implementation of captchas to limit front-end abuse attempts.
-  Implementation of permission tokens to limit back-end abuse attempts.
+#### Dashboard
+
+1. Javascript poll time/control can be altered.
+1. Memcache cache time can be increased.
+1. Implementation of permission tokens (e.g. load-based).
+
+#### Survey
+
+1. Automatic answer-sending can be altered to e.g. onblur only, instead of also onchange.
+1. Implementation of captchas to limit front-end abuse attempts.
+1. Implementation of permission tokens to limit back-end abuse attempts.
 
 
-1. Separate servers per component, esp. database.
+Scaling: Infrastructure & Framework
+-----------------------------------
+
+1. Separate (cloud) servers scaled per component, esp. database.
 1. Load balancer, multiple web & database servers.
 1. Nginx revision/replace. Static content.
 1. Async upgrade, sending & receiving data on-the-fly.
