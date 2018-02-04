@@ -5,12 +5,12 @@ Scaling Strategies
 Architecture
 ------------
 
-1. Client-logic on client (i.e. Javascript-heavy)
-1. Matching the Javascript<->Python data interface (i.e. JSON)
-1. API Star server - high-performance w asyncio upgrade option. Python 3.6
-1. Non-HTML static content is served via whitenoise for smooth CDN upgrade path
-1. Database usage favours key lookups, lending to datastores & similar
-
+1. Client-logic on client (i.e. Javascript-heavy).
+1. Matching the Javascript<->Python data interface (i.e. JSON).
+1. API Star server - high-performance w asyncio upgrade option. Python 3.6.
+1. Non-HTML static content is served via whitenoise for smooth CDN upgrade path.
+1. Database usage favours key lookups, lending to datastores & similar.
+1. Abstracted key/value cache behaviour (currently memcache).
 
 Scaling: General
 ----------------
@@ -18,11 +18,13 @@ Scaling: General
 #### Aggregation of marginal gains
 
 > "1 percent margin for improvement in everything you do."
-- Dave Brailsford
+-Dave Brailsford
 
 #### Network traffic
 
-Libraries combined, minified, optimised.
+1. Libraries combined, minified, optimised.
+1. Paths shortened.
+1. CDN directives on HTML pages.
 
 #### Dashboard
 
