@@ -15,11 +15,9 @@ Architecture
 Scaling: General
 ----------------
 
-> "Aggregation of marginal gains." (Dave Brailsford)
-
-Look for the:
-
+> "Aggregation of marginal gains."
 > "1 percent margin for improvement in everything you do."
+> - Dave Brailsford
 
 #### Network traffic
 
