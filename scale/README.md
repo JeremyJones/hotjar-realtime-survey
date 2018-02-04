@@ -15,7 +15,11 @@ Architecture
 Scaling: General
 ----------------
 
-Accumulation of a number of incremental gains.
+> "Aggregation of marginal gains." (Dave Brailsford)
+
+Look for the:
+
+> "1 percent margin for improvement in everything you do."
 
 #### Network traffic
 
