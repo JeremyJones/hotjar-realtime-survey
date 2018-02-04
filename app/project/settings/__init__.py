@@ -37,5 +37,5 @@ SETTINGS:dict = {
                }
 }
 
-COMMANDS = sqlalchemy_backend.commands
-COMPONENTS = sqlalchemy_backend.components
+commands = sqlalchemy_backend.commands
+components = sqlalchemy_backend.components

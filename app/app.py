@@ -4,17 +4,16 @@ Jeremy Jones, February 2018
 ---------------------------
 """
 
-
 from apistar.frameworks.wsgi import WSGIApp as App
 
 from project.settings import SETTINGS
-from project.settings import COMMANDS
-from project.settings import COMPONENTS
-from project.routes import ROUTES
+from project.settings import commands
+from project.settings import components
+from project.routes import routes
 
 
-app = App(routes=ROUTES, settings=SETTINGS,
-          commands=COMMANDS, components=COMPONENTS)
+app = App(routes=routes, settings=SETTINGS,
+          commands=commands, components=components)
 
 
 @staticmethod

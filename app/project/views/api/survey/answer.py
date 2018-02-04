@@ -69,7 +69,6 @@ def answer_question(data: http.RequestData, session: Session) -> dict:
     answer.answer = answer_val
     answer.in_progress = 'Y'
     answer.valid_answer = 'Y' if validate_answer(question, answer) else 'N'
-
     session.add(answer)
 
     responder.last_at = int(dt.now().timestamp())

@@ -19,7 +19,7 @@ from project.views.api.survey.getState import get_state
 from project.views.api.dashboard import dashboard_data
 
 
-ROUTES = [
+routes:list = [
 
     # HTML pages & static URLs
     Route('/dashboard', 'GET', dashboard),  # admin page

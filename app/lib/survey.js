@@ -19,6 +19,7 @@ var app = {
     "questions": null,
     "myIdentifier": null,
     "_readyFails": 0,
+    "_completed": false,
     //
     "lastAnswers": {},
     //
@@ -106,7 +107,8 @@ var app = {
             'url': '/questions',
 	    'method': 'POST',
             'success': function(d) {
-		app.questions = d._items;
+		    if (app._completed) return;
+		    app.questions = d._items;
 	    }});
     },
 
@@ -137,11 +139,16 @@ var app = {
 	else { // cookie-d user
 	    if ("string" == typeof(existingId))
 		existingId = JSON.parse(existingId);
-
+	    
 	    $.ajax({'url': '/getState',
-		    'method': 'POST',
+			'method': 'POST',
+			'data': {'i': existingId.eui},
 		    'success': function (state) {
-			return;
+			if ("undefined" != typeof(state['complete']))
+			    if (state['complete']) {
+				app._completed = true;
+				return app.drawThankyou();
+			    }
 		    }});
 			
 	    app.myIdentifier = existingId;
@@ -193,6 +200,8 @@ var app = {
     },
     
     "drawScreen": function () {
+
+	if (app._completed) return;
 
 	var screenquestions = app.getCurrentQuestions();
 
@@ -443,8 +452,8 @@ var app = {
     },
     
     "start": function () {
-	app.getQuestions();
 	app.setIdentifier();
+	app.getQuestions();
 	app.runLoop();
     } // last
 };

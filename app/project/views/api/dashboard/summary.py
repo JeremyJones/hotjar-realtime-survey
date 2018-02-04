@@ -1,22 +1,21 @@
 from datetime import datetime as dt
 from sqlalchemy import func
+from apistar import http
+from apistar.backends.sqlalchemy_backend import Session
 
 from project.models import Answer
-from .behaviours.surveys_count import get_surveys_count
-from .behaviours.average_age import get_average_age
-from .behaviours.gender_ratio import get_gender_ratio
-from .behaviours.top_3_colors import get_top_3_colors
-from .behaviours.last_answered import get_last_answered
-
-
-def get_summary(session) -> dict:
+from project.models.dashboard.summary import Summariser
+        
+def get_summary(session: Session) -> dict:
     """
     API: Get a JSON structure of summary data, for the admin page
     """
+    s = Summariser()  # could substitute different behaviours e.g. if requested via the POST data
+
     return {
-        "num_responses": get_surveys_count(session),
-        "average_age": get_average_age(session),
-        "gender_ratio": get_gender_ratio(session),
-        "top_3_colors": get_top_3_colors(session),
-        "updated_at": get_last_answered(session)
+        "num_responses": s.countSurveys(session),
+        "average_age": s.averageAge(session),
+        "gender_ratio": s.genderRatio(session),
+        "top_3_colors": s.topColours(session),
+        "updated_at": s.lastAnswered(session)
     }

@@ -1,6 +1,19 @@
    74 ./tests.py
    41 ./project/settings/__init__.py
-   48 ./project/models/__init__.py
+   23 ./project/models/dashboard/behaviours/averageAge/default.py
+    1 ./project/models/dashboard/behaviours/averageAge/__init__.py
+   22 ./project/models/dashboard/behaviours/lastAnswered/default.py
+    1 ./project/models/dashboard/behaviours/lastAnswered/__init__.py
+   38 ./project/models/dashboard/behaviours/genderRatio/default.py
+    1 ./project/models/dashboard/behaviours/genderRatio/__init__.py
+   18 ./project/models/dashboard/behaviours/countSurveys/default.py
+    1 ./project/models/dashboard/behaviours/countSurveys/__init__.py
+    1 ./project/models/dashboard/behaviours/__init__.py
+   36 ./project/models/dashboard/behaviours/topAnswers/default.py
+    1 ./project/models/dashboard/behaviours/topAnswers/__init__.py
+    1 ./project/models/dashboard/__init__.py
+   58 ./project/models/dashboard/summary.py
+   47 ./project/models/__init__.py
    13 ./project/utils/validators/valid_select/valid_option/__init__.py
    16 ./project/utils/validators/valid_select/__init__.py
     4 ./project/utils/validators/valid_string/__init__.py
@@ -11,24 +24,17 @@
     5 ./project/utils/caches/memcache/__init__.py
     8 ./project/utils/caches/__init__.py
    48 ./project/views/api/dashboard/responses.py
-   15 ./project/views/api/dashboard/behaviours/top_3_colors/__init__.py
-    1 ./project/views/api/dashboard/behaviours/__init__.py
-    6 ./project/views/api/dashboard/behaviours/average_age/__init__.py
-    8 ./project/views/api/dashboard/behaviours/surveys_count/__init__.py
-   28 ./project/views/api/dashboard/behaviours/gender_ratio/__init__.py
-   11 ./project/views/api/dashboard/behaviours/last_answered/__init__.py
    52 ./project/views/api/dashboard/__init__.py
-   22 ./project/views/api/dashboard/summary.py
+   21 ./project/views/api/dashboard/summary.py
    34 ./project/views/api/survey/finalise.py
     4 ./project/views/api/survey/__init__.py
-    9 ./project/views/api/survey/getState.py
-   88 ./project/views/api/survey/answer.py
+   28 ./project/views/api/survey/getState.py
+   87 ./project/views/api/survey/answer.py
    21 ./project/views/api/__init__.py
    33 ./project/views/html/__init__.py
    89 ./project/views/auth/__init__.py
     1 ./project/views/__init__.py
    42 ./project/routes/__init__.py
     0 ./project/__init__.py
-   13 ./flaskapp.py
    29 ./app.py
-  810 total
+  946 total

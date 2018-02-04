@@ -169,10 +169,14 @@ var app = {
 
 	$("#enableLive").on('click', function () {
 		app.runtime.paused = false;
+		$("#enableLive").attr('disabled',true);
+		$("#disableLive").attr('disabled',false);
 		return false;
 	    });
 	$("#disableLive").on('click', function () {
 		app.runtime.paused = true;
+		$("#enableLive").attr('disabled',false);
+		$("#disableLive").attr('disabled',true);
 		return false;
 	    });
 	
@@ -215,9 +219,13 @@ var app = {
     // --
     displaySummaryDataPoints: function () {
 	//app.log("Re-drawing summary");
-	var showData = app.fillDataConditional;  // only if they've changed
+	var showData = app.fillDataConditional,  // only if they've changed
+	displayCount = "" + app.runtime.data.summary.num_responses;
+
+	if (app.runtime.data.summary.num_responses >= 10000)
+	    displayCount = "" + parseInt(app.runtime.data.summary.num_responses / 1000) + "k";
 	
-	showData($("#sAnswerCount"), "" + app.runtime.data.summary.num_responses);
+	showData($("#sAnswerCount"), displayCount);
 	showData($("#sAnswerAge"), Math.abs((0.0 + app.runtime.data.summary.average_age).toFixed(1)));
 
 	app.pieGraphMF("sAnswerGender", app.runtime.data.summary.gender_ratio);
