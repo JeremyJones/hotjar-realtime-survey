@@ -385,7 +385,8 @@ var app = {
 			      function () {
 				  if ($(this).attr('id') == 'nextButton') {
 				      $("input").each(function () {
-					  app.sendAnswer($(this));
+					  return;
+					  //app.sendAnswer($(this));
 				      });
 				      
 				      if (! app.canGoFwd()) return false;

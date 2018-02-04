@@ -1,6 +1,6 @@
 from apistar.test import TestClient
 from app import app
-from project.routes import hello
+from project.routes import homepage
 from re import match
 from unittest import TestCase, skip
 
@@ -32,11 +32,11 @@ def default_page_return() -> dict:
     """
     return {'message': "Welcome to the future, mystery person!"}
 
-def test_hello() -> bool:
+def test_homepage() -> bool:
     """
     Testing a view directly.
     """
-    data:dict = hello()
+    data:dict = homepage()
     assert data == default_page_return()
 
 def get_response(url:str):

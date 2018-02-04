@@ -188,6 +188,7 @@ var app = {
     },
     // --
     formatMaleFemale: function (r) {
+	return "";
 
 	var html = "", looper = null;
 
@@ -199,10 +200,18 @@ var app = {
 	return html;
     },
     // --
-    pieGraphMF: function () {
-	return;
-    },
+    pieGraphMF: function (tar, ratio) {
+	var dataTable = [['Gender','People']],
+	    r, data, options, chart;
 
+	for (r in ratio) dataTable.push([r, ratio[r]['cnt']]);
+	
+	data = google.visualization.arrayToDataTable(dataTable);
+
+	options = {legend: {position: 'bottom'}, height: 130};
+	chart = new google.visualization.PieChart(document.getElementById(tar));
+	chart.draw(data, options);
+    },
     // --
     displaySummaryDataPoints: function () {
 	//app.log("Re-drawing summary");
@@ -211,7 +220,7 @@ var app = {
 	showData($("#sAnswerCount"), "" + app.runtime.data.summary.num_responses);
 	showData($("#sAnswerAge"), Math.abs((0.0 + app.runtime.data.summary.average_age).toFixed(1)));
 
-	app.pieGraphMF($("#sAnswerGender"));
+	app.pieGraphMF("sAnswerGender", app.runtime.data.summary.gender_ratio);
 	// showData($("#sAnswerGender"), app.formatMaleFemale(app.runtime.data.summary.gender_ratio));
 
 	if (app.runtime.data.summary.top_3_colors.length) 
@@ -239,10 +248,10 @@ var app = {
     log: function (m) {
 	return;
     },
-    log: function (m) {
+    xlog: function (m) {
 	console.log(m);
     }
 };
     
-google.charts.load('current', {'packages':['table']});
+google.charts.load('current', {'packages':['table','corechart']});
 google.charts.setOnLoadCallback(app.start);

@@ -10,7 +10,7 @@ READMEcopy.txt
 __pycache__/*
 *.pyc
 app/.cache/*
-ignored/*
+.ignored/*
 .env
 yuicompressor-2.4.8.jar
 #*#
