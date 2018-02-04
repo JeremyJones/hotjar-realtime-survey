@@ -22,24 +22,3 @@ To run the app:
 cd app
 apistar run
 ```
-
-Command-line interface (CLI)
-----------------------------
-
-To use the command-line interface to the API, install coreapi-cli:
-
-```
-pip install coreapi-ali
-```
-
-and then load the schema:
-
-```
-coreapi get http://localhost/docs/schema/
-```
-
-and from there you can query the system application, retrieve views, and make changes:
-
-```
-coreapi action get_questions
-```
