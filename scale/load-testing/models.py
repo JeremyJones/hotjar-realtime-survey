@@ -3,7 +3,7 @@ Models for the load tester for the real-time surveys solution.
 """
 
 from requests import post
-from json import loads
+from json import loads, JSONDecodeError
 from time import sleep
 from random import choice
 from gzip import open
@@ -18,7 +18,18 @@ def get_a_namegender() -> list:
 
         for line in fo:
             if line[0] == '"': continue
-            namesgenders.append(line)
+
+            bits = line.decode('ASCII').split(',')
+            
+            namesgenders.append({"name":'{first} {last}'.\
+                                 format(first=bits[1][1:len(bits[1])-1],
+                                        last=choice(['Smith','Jones','Patel','Kim'])),
+                                 "gender": 'Male' if bits[3][1] == 'b' else 'Female'})
+            
+    return choice(namesgenders)
+            
+    return {"name":choice(namesgenders),
+            "gender": choice(['Male','Female'])}
 
     return {"name":''.join(['abcdefghijklmnopqrstuvwxyz'[choice(range(26))]
                             for _ in range(choice(range(4,7)))]),
@@ -33,6 +44,7 @@ class Surveyee():
 
     def __init__(self):
         self.base_url = 'http://hotjar.jerjones.me'
+        self.id = None
 
     def ret_post_content(self, path):
         return post('{base}{path}'.\
@@ -40,20 +52,27 @@ class Surveyee():
                            path=path)).content.decode('ascii')
 
     def answer(self, postdata):
+        # print("posting {}".format(postdata))
+        # sleep(2)
         return post(self.base_url + '/answer', postdata)
 
     def finalise(self):
         pass
     
     def random_go(self):
-        self.questions = loads(self.ret_post_content('/questions'))
+        try:
+            self.questions = loads(self.ret_post_content('/questions'))
+        except JSONDecodeError:
+            print(self.ret_post_content('/questions'))
+            raise
+        
         self.id = loads(self.ret_post_content('/getIdentifier'))
        
         for q in self.questions.get('_items'):
             postdata = {"who": self.id.get('eui'),
                         "q": 'answer2question{id}'.format(id=q.get('id'))}
             
-            sleep(choice(range(1,3)))
+            # sleep(choice(range(1,3)))
                 
             question = q.get('question')
 

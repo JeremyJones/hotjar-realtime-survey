@@ -14,7 +14,7 @@ def submit_survey() -> None:
 
 
 def main() -> None:
-    for i in range(10000):
+    for i in range(1):
         child_pid = fork()
 
         if not child_pid:  # child
