@@ -121,33 +121,30 @@ Database models: Question, Response, Answer
 Application models: Summariser
 1. routes/  
 URL routing by path & method  
-Built-in backend configuration
+Configuration of built-in web-based backend
 1. settings/  
 Overall application settings, including survey_id  
-Database configuration through the environment  
+Database access details from the environment  
 1. utils/  
-Application cache interface  
+Application cache
 Answer & field validators
 1. views/  
-api/ - handlers for the API calls via Ajax  
-auth/ - handlers related to authorisation & setup  
-html/ - handlers for the HTML pages
+api/ - handlers for non-authorisation API calls, via Ajax.
+auth/ - handlers related to authorisation & setup. Ajax.
+html/ - handlers for HTML pages.
 
 #### Relevant Design Patterns
 
-The Summariser object, in models/dashboard/, provides the summary data
-used in the dashboard. Each of those five data values (including 'last
-updated') is implemented using an encapsulated behaviour
-(*Strategy*). Each value is currently running from a 'default'
-behaviour, which can be changed over time, including optimisations,
-without requiring changes to the original calling code.
+On the dashboard, the summary data values (and 'last updated') are
+implemented using interchangeable encapsulated behaviours
+(*Strategy*).
 
-A naive/informal Strategy implementation is also in place on the field
+An informal Strategy implementation is also in place on the field
 validation routines in utils/validators/.
 
 The behavioural class which generates the 'Top Colours' value is
-*inherited* from a generic 'Top Answers' class which can determine the
-most popular values in any field.
+*inherited* from a generic 'Top Answers' class, which can be used to
+determine the most popular answers for any question.
 
 #### Javascript
 
