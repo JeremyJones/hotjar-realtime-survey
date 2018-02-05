@@ -1,0 +1,11 @@
+     2 ./lib/jq.js
+   265 ./lib/dashboard.js
+     4 ./lib/require.js
+   174 ./lib/stack.js
+     5 ./lib/u.js
+   165 ./lib/js.cookie.js
+   452 ./lib/survey.js
+     1 ./lib/bb.js
+ 14289 ./lib/moment-with-locales.js
+     9 ./lib/uibootstrap.js
+ 15366 total
