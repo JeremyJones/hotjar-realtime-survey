@@ -228,7 +228,12 @@ var app = {
 	
 	data = google.visualization.arrayToDataTable(dataTable);
 
-	options = {legend: {position: 'bottom'}, height: 130};
+	options = {legend: {position: 'bottom'}, height: 101,
+		   //pieStartAngle: 135,
+		   slices: {0: { color: '#888888' },
+			    1: { color: 'yellow' }}
+	}
+		   
 	chart = new google.visualization.PieChart(document.getElementById(tar));
 	chart.draw(data, options);
     },
