@@ -238,5 +238,3 @@ Scaling: MySQL Database
 
 The disk space requirements for the database are up to 5mb per 1,000
 completed surveys.
-
-Please see app/scaling.md for information.
