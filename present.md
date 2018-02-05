@@ -133,4 +133,4 @@ and self-contained.
 Performance, growth and scale
 -----------------------------
 
-Please see scale/README.md for information.
+Please see app/scaling.md for information.
