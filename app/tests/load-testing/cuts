@@ -1,0 +1,12 @@
+            
+
+            on
+
+            try:
+                bits = line.encode('ASCII').split(",")
+            except Exception:
+                bits = line.split(",")
+                
+            namesgenders.append({"name": bits[1].sub(r'"', r''),
+                                 "gender": "Male" if bits[3][1] == 'b' else 'Female'})
+
