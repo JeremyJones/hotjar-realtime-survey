@@ -86,27 +86,27 @@ The full solution is in app/ which has the following contents:
 1. project: *Python solution*
 1. requirements.txt: pip installation file
 1. templates: HTML template files for survey, dashboard & homepage
-1. tests.py: Built-in framework test script
+1. tests: Built-in framework test script & load test scripts
 1. www: Server root for Nginx proxy server
 
 #### project/ directory
 
 1. models/
-  1. Database models: Question, Response, Answer
-  1. Application models: Summariser
+* Database models: Question, Response, Answer
+* Application models: Summariser
 1. routes/
-  1. URL routing by path & method
-  1. Built-in backend configuration
+* URL routing by path & method
+* Built-in backend configuration
 1. settings/
-  1. Overall application settings, including survey_id
-  1. Database configuration through the environment
+* Overall application settings, including survey_id
+* Database configuration through the environment
 1. utils/
-  1. Application cache interface
-  1. Answer & field validators
+* Application cache interface
+* Answer & field validators
 1. views/
-  1. api/ - handlers for the API calls via Ajax
-  1. auth/ - handlers related to authorisation & setup
-  1. html/ - handlers for the HTML pages
+* api/ - handlers for the API calls via Ajax
+* auth/ - handlers related to authorisation & setup
+* html/ - handlers for the HTML pages
 
 #### Relevant Design Patterns
 
