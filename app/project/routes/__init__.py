@@ -35,7 +35,7 @@ routes:list = [
     Route('/finalise', 'POST', finalise),
     Route('/getState', 'POST', get_state),
     #
-    Route('/dashdata', 'POST', dashboard_data),
+    Route('/d', 'POST', dashboard_data),
     
     # Others
     Include('/docs', docs_urls)  # built-in admin ui

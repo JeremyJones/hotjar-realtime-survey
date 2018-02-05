@@ -45,7 +45,7 @@ var app = {
     },
     // --
     getDashData: function () {
-	$.ajax({"url": "/dashdata",
+	$.ajax({"url": "/d",
 		"data": {"last": app.runtime.data_checksum},
 		"processData": true,
 		"method": "POST",
@@ -229,9 +229,9 @@ var app = {
 	data = google.visualization.arrayToDataTable(dataTable);
 
 	options = {legend: {position: 'bottom'}, height: 101,
-		   //pieStartAngle: 135,
+		   pieStartAngle: 180,
 		   slices: {0: { color: '#888888' },
-			    1: { color: 'yellow' }}
+			    1: { color: '#AAAACC' }}
 	}
 		   
 	chart = new google.visualization.PieChart(document.getElementById(tar));
@@ -268,11 +268,20 @@ var app = {
     },
     // --
     drawLastUpdatedText: function () {
-	var text = moment(app.runtime.data.summary.updated_at, "X").fromNow();
+	var text = moment(app.runtime.data.summary.updated_at, "X").fromNow(),
+	element = $("#sLastUpdated"),
+	includeTooltip = true,
+	mDate = new Date( (0 + app.runtime.data.summary.updated_at) * 1000);
 
-	if (text == 'Invalid date') text = "No surveys yet";
+	if (text == 'Invalid date') {
+	    text = "No surveys yet";
+	    includeTooltip = false;
+	}
 	
-	$("#sLastUpdated").html(text);
+	element.html(text);
+
+	if (includeTooltip)
+	    element.attr('title', mDate.toLocaleString());
     },
   
     /*

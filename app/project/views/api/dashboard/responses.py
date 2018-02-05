@@ -29,7 +29,7 @@ def get_responses(data, session) -> dict:
         items:list = list(filter(lambda surv: len(surv['answers']) > 0,
                                  items))
 
-    checksum:str = sha256(dumps(items).encode('utf-8')).hexdigest()
+    checksum:str = sha256(dumps(items).encode('utf-8')).hexdigest()[:12]
 
     try:
         if data['checksum'] == checksum:
