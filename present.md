@@ -91,22 +91,22 @@ The full solution is in app/ which has the following contents:
 
 #### project/ directory
 
-1. models/
-  1. Database models: Question, Response, Answer
-  1. Application models: Summariser
-1. routes/
-  1. URL routing by path & method
-  1. Built-in backend configuration
-1. settings/
-  1. Overall application settings, including survey_id
-  1. Database configuration through the environment
-1. utils/
-  1. Application cache interface
-  1. Answer & field validators
-1. views/
-  1. api/ - handlers for the API calls via Ajax
-  1. auth/ - handlers related to authorisation & setup
-  1. html/ - handlers for the HTML pages
+1. models/  
+Database models: Question, Response, Answer  
+Application models: Summariser
+1. routes/  
+URL routing by path & method  
+Built-in backend configuration
+1. settings/  
+Overall application settings, including survey_id  
+Database configuration through the environment  
+1. utils/  
+Application cache interface  
+Answer & field validators
+1. views/  
+api/ - handlers for the API calls via Ajax  
+auth/ - handlers related to authorisation & setup  
+html/ - handlers for the HTML pages
 
 #### Relevant Design Patterns
 
