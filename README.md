@@ -161,4 +161,82 @@ and self-contained.
 Performance, growth and scale
 -----------------------------
 
+The rest of this document lists potential solutions for scalabil deals with various 
+
+Existing Architecture
+---------------------
+
+The current implementation contains a number of architectural & design
+decisions made with scale in mind:
+
+1. Client-logic on client (i.e. Javascript-heavy).
+1. Matching the Javascript<->Python data interface (i.e. JSON) as closely as possible; avoid translation.
+1. Non-HTML static content is served via whitenoise for smooth CDN upgrade path.
+1. Database usage favours key lookups, lending to datastores & similar.
+1. Abstracted key/value cache behaviour (currently memcache).
+1. APIStar server - high-performance with asyncio upgrade option
+
+Scaling: General
+----------------
+
+#### Aggregation of marginal gains
+
+> "1 percent margin for improvement in everything you do."
+-Dave Brailsford
+
+#### Network traffic
+
+1. Libraries combined, minified, optimised.
+1. CDN directives on HTML pages.
+1. Paths shortened.
+
+#### General
+
+1. Requests for HTML pages to static files. (No current usage of Jinja template variables.)
+1. /questions into static file.
+1. Memcache lookups.
+
+#### Dashboard
+
+1. Javascript poll time/control can be altered.
+1. Memcache cache time can be increased.
+1. Implementation of permission tokens (e.g. load-based).
+1. Summary area backend (/dashdata optimisations)
+
+#### Survey
+
+1. Automatic answer-sending can be altered to e.g. onblur only, instead of also onchange.
+1. Implementation of captchas to limit front-end abuse attempts.
+1. Implementation of permission tokens to limit back-end abuse attempts.
+
+
+Scaling: Infrastructure & Framework
+-----------------------------------
+
+1. Separate (cloud) servers scaled per component, esp. database.
+1. CDN integration (esp for whitenoise-served static content).
+1. Load balancers, multiple web & database tiers.
+1. Nginx revision/replace. Static content.
+1. Async upgrade, sending & receiving data on-the-fly.
+
+
+Scaling: MySQL Database
+-----------------------
+
+1. Pre-calculate heavier queries, esp. average age, gender ratio.
+1. Hardware.
+1. Optimised server conf.
+1. Reduced integer column sizes.
+1. Optimised indexes e.g. substr, order.
+1. INSERT DELAYED & similar.
+1. Views (native or bespoke).
+1. Master/Slave (master for surveys; slaves for dashboards).
+1. Clustering.
+
+
+#### Disk usage
+
+The disk space requirements for the database are up to 5mb per 1,000
+completed surveys.
+
 Please see app/scaling.md for information.
