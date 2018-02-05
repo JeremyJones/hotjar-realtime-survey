@@ -30,6 +30,7 @@ Demonstration
 Contents
 --------
 
+1. Homepage
 1. Two browsers demonstration
 1. Admin API
 1. Implementation overview
@@ -45,8 +46,9 @@ Survey / Admin links plus a few others.
 Two browsers, survey & dashboard
 --------------------------------
 
-1. Set up two browser windows.
-1. Complete survey & watch dashboard.
+1. One browser window to /survey
+1. One browser window to /dashboard
+1. Complete survey & watch dashboard
 
 #### Survey
 
