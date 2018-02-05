@@ -100,9 +100,6 @@ The server application runs in Python 3.6 with a MySQL 5.7 database
 backend (through SQLAlchemy) and a caching interface (currently
 memcache).
 
-Code README contains the procedure for installing & running (exc data
-platform i.e. MySQL & memcache).
-
 Code notes
 ----------
 
