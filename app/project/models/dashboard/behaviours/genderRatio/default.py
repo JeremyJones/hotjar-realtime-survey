@@ -11,6 +11,7 @@ class genderRatioBehaviour():
     def getResult(self, session) -> dict:
         sql = 'SELECT answer, COUNT(*) FROM answers ' +\
               'WHERE question_id = %d ' % self.get_question_id() +\
+              'AND answer != "Please select" ' +\
               'GROUP BY answer LIMIT 2'
 
         try:

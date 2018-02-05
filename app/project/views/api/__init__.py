@@ -1,6 +1,7 @@
 from apistar.backends.sqlalchemy_backend import Session
 
 from project.models import Question
+from project.settings import SETTINGS
 
 
 def get_questions(session: Session) -> dict:
@@ -8,7 +9,7 @@ def get_questions(session: Session) -> dict:
     API: Retrieve a list of the questions in JSON format
     """
     queryset = session.query(Question).\
-               filter_by(survey_id = 0).\
+               filter_by(survey_id = SETTINGS['SURVEY_ID']).\
                order_by(Question.order_in_list).\
                all()
     

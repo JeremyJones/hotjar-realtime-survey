@@ -26,6 +26,12 @@ Scaling: General
 1. CDN directives on HTML pages.
 1. Paths shortened.
 
+#### General
+
+1. HTML to static files.
+1. /questions into static file.
+1. Memcache lookups.
+
 #### Dashboard
 
 1. Javascript poll time/control can be altered.
@@ -49,18 +55,18 @@ Scaling: Infrastructure & Framework
 1. Async upgrade, sending & receiving data on-the-fly.
 
 
-
 Scaling: MySQL Database
 -----------------------
 
-1. Hardware
-1. Optimised server conf
-1. Reduced integer column sizes 
-1. Optimised indexes e.g. substr, order
-1. INSERT DELAYED & similar
-1. Views (native or bespoke)
-1. Master/Slave (master for surveys; slaves for dashboards)
-1. Clustering
+1. Pre-calculate heavier queries, esp. average age, gender ratio.
+1. Hardware.
+1. Optimised server conf.
+1. Reduced integer column sizes.
+1. Optimised indexes e.g. substr, order.
+1. INSERT DELAYED & similar.
+1. Views (native or bespoke).
+1. Master/Slave (master for surveys; slaves for dashboards).
+1. Clustering.
 
 
 #### Disk usage
