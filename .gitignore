@@ -15,3 +15,4 @@ app/.cache/*
 yuicompressor-2.4.8.jar
 #*#
 setup/*.sql.gz
+scale/load-testing/names.csv.gz
