@@ -9,10 +9,11 @@ def get_questions(session: Session) -> dict:
     API: Retrieve a list of the questions in JSON format
     """
     queryset = session.query(Question).\
-               filter_by(survey_id = SETTINGS['SURVEY_ID']).\
+               filter(Question.survey_id == SETTINGS['SURVEY_ID'],
+                      Question.order_in_list >= 1).\
                order_by(Question.order_in_list).\
                all()
-    
+
     return {"_items": [{"question": question.question,
                         "required": question.required,
                         "id": question.id,
