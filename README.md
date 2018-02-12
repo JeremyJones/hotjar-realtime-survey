@@ -68,3 +68,21 @@ The app is designed to scale in the following ways:
   app/flaskapp.py for starters.
 
 
+Issues
+------
+
+# PEP-8 compliance
+# HTTP return statuses do not match result (eg. simulated 304)
+# Normalised database schema & non-self-contained stored data
+  structures could lead to issues around consistency.
+# 74 genders in Facebook's preferences
+# Storage of data before the user has clicked Next to confirm
+  their intention to submit data
+# The use of transactional HTTP leads to frequent polling, whereas
+  push notifications can be achieved using websockets
+# Errors in the models eg. String type on an id
+# Using Google viz tables, and relying on its interface for updating
+  and handling large data sets (ie. paging), instead of using
+  eg. Twitter-style feed updates, introduces usability and UX issues
+# The two Javascript applications would benefit from refactoring and
+  re-implementation to improve their efficiency and maintainability
