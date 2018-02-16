@@ -3,8 +3,7 @@ Identity/Authorisation routines.
 """
 
 from datetime import datetime as dt
-from hashlib import sha256
-from random import SystemRandom
+from secrets import token_hex
 
 from os import environ
 
@@ -34,12 +33,7 @@ def make_new_response(session: Session) -> Response:
     Generate a new SHA identifier
     """
     identifier:Response = Response()
-    longstring:str = "{rand}-{time}".\
-                     format(rand=''.join([SystemRandom().choice(["abcdefghijklmnopqrstuvwxyz"])
-                                          for n in range(100)]),
-                            time=dt.now().isoformat())
-    
-    identifier.end_user_id:str = sha256(longstring.encode('utf-8')).hexdigest()
+    identifier.end_user_id:str = token_hex()
     identifier.started_at:int = int(dt.now().timestamp())
     identifier.is_completed:str = ''
 
