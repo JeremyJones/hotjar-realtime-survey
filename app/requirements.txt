@@ -22,5 +22,5 @@ six==1.11.0
 SQLAlchemy==1.2.2
 uritemplate==3.0.0
 urllib3==1.22
-Werkzeug==0.14.1
+Werkzeug==0.15.3
 whitenoise==3.3.1
